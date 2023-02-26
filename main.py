@@ -7,7 +7,13 @@ customtkinter.set_appearance_mode("system")
 customtkinter.set_default_color_theme("blue")
 
 root = customtkinter.CTk()
-root.geometry("500x500")
+root_width = 500
+root_height = 500
+screen_width = root.winfo_screenwidth()
+screen_height = root.winfo_screenheight()
+x = (screen_width // 2) - (root_width // 2)
+y = 100
+root.geometry(f"{root_width}x{root_height}+{x}+{y}")
 
 def closeProgram():
     exit()
@@ -30,8 +36,21 @@ button = customtkinter.CTkButton(master=frame, text="Close", command=closeProgra
 button.pack(pady=12, padx = 10)
 button.place(relx=0.8, rely=0.95, anchor=tkinter.CENTER)
 
-#run button
-button = customtkinter.CTkButton(master=frame, text="Run", command=encode.ownAlgoEncoder,width=120,height=32,border_width=1,corner_radius=8)
+def email():
+    dialog = customtkinter.CTkInputDialog(text="Enter Email address:", title="Send Mail")
+    dialog_width = dialog.winfo_reqwidth()
+    dialog_height = dialog.winfo_reqheight()
+    root.update_idletasks()  # update the root window to get the correct values for its dimensions
+    root_width = root.winfo_width()
+    root_height = root.winfo_height()
+    x = (root.winfo_screenwidth() // 2) - (dialog_width // 2)
+    y = (root.winfo_screenheight() // 2) - (dialog_height // 2) - (root_height // 2)
+    dialog.geometry(f"{dialog_width}x{dialog_height}+{x}+{y}")
+    print("Password:", dialog.get_input())
+
+
+#email button
+button = customtkinter.CTkButton(master=frame, text="Email", command=email,width=120,height=32,border_width=1,corner_radius=8)
 button.pack(pady=12, padx = 10)
 button.place(relx=0.2, rely=0.95, anchor=tkinter.CENTER)
 
@@ -61,7 +80,15 @@ segemented_button.place(relx=0.5, rely=0.4, anchor=tkinter.CENTER)
 
 #input dialog
 def button_click_event():
-    dialog = customtkinter.CTkInputDialog(text="Type in a key:", title="Custom Key")
+    dialog = customtkinter.CTkInputDialog(text="Type in a custom key:", title="Custom Key")
+    dialog_width = dialog.winfo_reqwidth()
+    dialog_height = dialog.winfo_reqheight()
+    root.update_idletasks()  # update the root window to get the correct values for its dimensions
+    root_width = root.winfo_width()
+    root_height = root.winfo_height()
+    x = (root.winfo_screenwidth() // 2) - (dialog_width // 2)
+    y = (root.winfo_screenheight() // 2) - (dialog_height // 2) - (root_height // 2)
+    dialog.geometry(f"{dialog_width}x{dialog_height}+{x}+{y}")
     print("Password:", dialog.get_input())
 
 
