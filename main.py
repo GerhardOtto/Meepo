@@ -34,7 +34,7 @@ frame = customtkinter.CTkFrame(master=root)
 frame.pack(pady=20, padx=60, fill="both", expand=True)
 
 #Title
-label = customtkinter.CTkLabel(master=frame, text="Lujvkl & Kljvkl", font=("Arial", 24))
+label = customtkinter.CTkLabel(master=frame, text="ENDEC", font=("Arial", 24))
 label.pack(pady=12, padx=10)
 
 #Dencode title
