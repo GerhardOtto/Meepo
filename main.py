@@ -2,6 +2,7 @@
 import customtkinter
 import tkinter
 import encode
+import emailer
 
 customtkinter.set_appearance_mode("system")
 customtkinter.set_default_color_theme("blue")
@@ -46,8 +47,8 @@ def email():
     x = (root.winfo_screenwidth() // 2) - (dialog_width // 2)
     y = (root.winfo_screenheight() // 2) - (dialog_height // 2) - (root_height // 2)
     dialog.geometry(f"{dialog_width}x{dialog_height}+{x}+{y}")
-    print("Password:", dialog.get_input())
-
+    emailaddress = dialog.get_input()
+    emailer.send_mail(emailaddress)
 
 #email button
 button = customtkinter.CTkButton(master=frame, text="Email", command=email,width=120,height=32,border_width=1,corner_radius=8)
