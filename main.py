@@ -1,4 +1,6 @@
 #use google auth for password
+#diffie-hellman key exchange
+
 import customtkinter
 import tkinter
 import encode
@@ -23,14 +25,19 @@ def closeProgram():
 frame = customtkinter.CTkFrame(master=root)
 frame.pack(pady=20, padx=60, fill="both", expand=True)
 
-label = customtkinter.CTkLabel(master=frame, text="File Encoder", font=("Arial", 24))
+#Title
+label = customtkinter.CTkLabel(master=frame, text="Lujvkl & Kljvkl", font=("Arial", 24))
 label.pack(pady=12, padx=10)
 
-#text boxes
-#entry1 = customtkinter.CTkEntry(master=frame, placeholder_text="Text")
-#entry1.pack(pady=12, padx=10)
-#entry = customtkinter.CTkEntry(master=frame,width=320,height=100,corner_radius=10, placeholder_text="Hello")
-#entry.place(relx=0.5, rely=0.5)
+#Dencode title
+label = customtkinter.CTkLabel(master=frame, text="Dencode", font=("Arial", 24))
+label.pack(pady=12, padx=10)
+label.place(relx = 0.38, rely = 0.6)
+
+#Ecode title
+label = customtkinter.CTkLabel(master=frame, text="Encode", font=("Arial", 24))
+label.pack(pady=12, padx=10)
+label.place(relx = 0.4, rely = 0.4)
 
 #close button
 button = customtkinter.CTkButton(master=frame, text="Close", command=closeProgram,width=120,height=32,border_width=1,corner_radius=8)
@@ -50,34 +57,50 @@ def email():
     emailaddress = dialog.get_input()
     emailer.send_mail(emailaddress)
 
+
 #email button
 button = customtkinter.CTkButton(master=frame, text="Email", command=email,width=120,height=32,border_width=1,corner_radius=8)
 button.pack(pady=12, padx = 10)
 button.place(relx=0.2, rely=0.95, anchor=tkinter.CENTER)
 
 #progress bar
-progressbar = customtkinter.CTkProgressBar(master=frame,width=160,height=20,border_width=5)
-progressbar.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
-progressbar.set(0.1)
+#progressbar = customtkinter.CTkProgressBar(master=frame,width=160,height=20,border_width=5, indeterminate_speed=True)
+#progressbar.place(relx=0.5, rely=0.82, anchor=tkinter.CENTER)
+#progressbar.set(0)
 
-#segmented button
+#segmented button for encoding
 def segmented_button_callback(value):
-    if (value == "Value 1"):
+    if (value == "Encode 1"):
         print("First button clicked")
-        segemented_button.set("Value 5")
-    if (value == "Value 2"):
+    if (value == "Encode 2"):
         print("Seccond button clicked")
-        segemented_button.set("Value 5")
-    if (value == "Value 3"):
+    if (value == "Encode 3"):
         print("Third button clicked")
-        segemented_button.set("Value 5")
-    if (value == "Value 4"):
+    if (value == "Encode 4"):
         print("Fourth button clicked")
-        segemented_button.set("Value 5")
+        
+    segemented_buttonEncoder.set("Value 0")
 
-segemented_button = customtkinter.CTkSegmentedButton(master=frame,values=["Value 1", "Value 2", "Value 3", "Value 4"],command=segmented_button_callback)
-segemented_button.pack(padx=20, pady=10)
-segemented_button.place(relx=0.5, rely=0.4, anchor=tkinter.CENTER)
+segemented_buttonEncoder = customtkinter.CTkSegmentedButton(master=frame,values=["Encode 1", "Encode 2", "Encode 3", "Encode 4"],command=segmented_button_callback)
+segemented_buttonEncoder.pack(padx=20, pady=10)
+segemented_buttonEncoder.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
+
+#segmented button for decoding
+def segmented_button_callback(value):
+    if (value == "Decode 1"):
+        print("First button clicked")
+    if (value == "Decode 2"):
+        print("Seccond button clicked")
+    if (value == "Decode 3"):
+        print("Third button clicked")
+    if (value == "Decode 4"):
+        print("Fourth button clicked")
+
+    segemented_buttonDecoder.set("Value 5")
+
+segemented_buttonDecoder = customtkinter.CTkSegmentedButton(master=frame,values=["Decode 1", "Decode 2", "Decode 3", "Decode 4"],command=segmented_button_callback)
+segemented_buttonDecoder.pack(padx=20, pady=10)
+segemented_buttonDecoder.place(relx=0.5, rely=0.7, anchor=tkinter.CENTER)
 
 #input dialog
 def button_click_event():
@@ -94,6 +117,6 @@ def button_click_event():
 
 
 button = customtkinter.CTkButton(root, text="Custom Key", command=button_click_event)
-button.place(relx=0.5, rely=0.3, anchor=tkinter.CENTER)
+button.place(relx=0.5, rely=0.2, anchor=tkinter.CENTER)
 
 root.mainloop()
