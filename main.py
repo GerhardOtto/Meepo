@@ -5,6 +5,7 @@ import customtkinter
 import tkinter
 import encode
 import emailer
+from tkinter import filedialog
 
 customtkinter.set_appearance_mode("system")
 customtkinter.set_default_color_theme("blue")
@@ -22,6 +23,13 @@ def closeProgram():
     exit()
 
 
+def theFileExplorer():
+    root = tkinter.Tk()
+    root.withdraw()
+
+    file_path = filedialog.askopenfilename()
+    return file_path
+
 frame = customtkinter.CTkFrame(master=root)
 frame.pack(pady=20, padx=60, fill="both", expand=True)
 
@@ -38,6 +46,11 @@ label.place(relx = 0.38, rely = 0.6)
 label = customtkinter.CTkLabel(master=frame, text="Encode", font=("Arial", 24))
 label.pack(pady=12, padx=10)
 label.place(relx = 0.4, rely = 0.4)
+
+#fileExplorer button
+button = customtkinter.CTkButton(master=frame, text="FileExplorer", command=theFileExplorer)
+button.pack(pady=12, padx=10)
+button.place(relx=0.5, rely=0.3, anchor=tkinter.CENTER)
 
 #close button
 button = customtkinter.CTkButton(master=frame, text="Close", command=closeProgram,width=120,height=32,border_width=1,corner_radius=8)
@@ -117,6 +130,7 @@ def button_click_event():
 
 
 button = customtkinter.CTkButton(root, text="Custom Key", command=button_click_event)
+button.pack(pady=12, padx = 10)
 button.place(relx=0.5, rely=0.2, anchor=tkinter.CENTER)
 
 root.mainloop()
