@@ -5,7 +5,8 @@ import customtkinter
 import tkinter
 import encode
 import emailer
-from tkinter import filedialog
+import fileExplorer
+import toBase64
 
 customtkinter.set_appearance_mode("system")
 customtkinter.set_default_color_theme("blue")
@@ -21,14 +22,6 @@ root.geometry(f"{root_width}x{root_height}+{x}+{y}")
 
 def closeProgram():
     exit()
-
-
-def theFileExplorer():
-    root = tkinter.Tk()
-    root.withdraw()
-
-    file_path = filedialog.askopenfilename()
-    return file_path
 
 frame = customtkinter.CTkFrame(master=root)
 frame.pack(pady=20, padx=60, fill="both", expand=True)
@@ -48,7 +41,13 @@ label.pack(pady=12, padx=10)
 label.place(relx = 0.4, rely = 0.4)
 
 #fileExplorer button
-button = customtkinter.CTkButton(master=frame, text="FileExplorer", command=theFileExplorer)
+filePath = None
+def clickFileExplorer():
+    fileExplorer.theFileExplorer(filePath)
+    print(filePath)
+
+
+button = customtkinter.CTkButton(master=frame, text="FileExplorer", command=clickFileExplorer)
 button.pack(pady=12, padx=10)
 button.place(relx=0.5, rely=0.3, anchor=tkinter.CENTER)
 
@@ -68,6 +67,7 @@ def email():
     y = (root.winfo_screenheight() // 2) - (dialog_height // 2) - (root_height // 2)
     dialog.geometry(f"{dialog_width}x{dialog_height}+{x}+{y}")
     emailaddress = dialog.get_input()
+    toBase64.touchBase()
     emailer.send_mail(emailaddress)
 
 
@@ -85,16 +85,12 @@ button.place(relx=0.2, rely=0.95, anchor=tkinter.CENTER)
 def segmented_button_callback(value):
     if (value == "Encode 1"):
         print("First button clicked")
-    if (value == "Encode 2"):
+    if (value == "Encode OwnAlg"):
         print("Seccond button clicked")
-    if (value == "Encode 3"):
-        print("Third button clicked")
-    if (value == "Encode 4"):
-        print("Fourth button clicked")
         
-    segemented_buttonEncoder.set("Value 0")
+    segemented_buttonEncoder.set("null")
 
-segemented_buttonEncoder = customtkinter.CTkSegmentedButton(master=frame,values=["Encode 1", "Encode 2", "Encode 3", "Encode 4"],command=segmented_button_callback)
+segemented_buttonEncoder = customtkinter.CTkSegmentedButton(master=frame,values=["Encode 1", "Encode OwnAlg"],command=segmented_button_callback)
 segemented_buttonEncoder.pack(padx=20, pady=10)
 segemented_buttonEncoder.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
@@ -102,16 +98,12 @@ segemented_buttonEncoder.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 def segmented_button_callback(value):
     if (value == "Decode 1"):
         print("First button clicked")
-    if (value == "Decode 2"):
+    if (value == "Decode OwnAlgo"):
         print("Seccond button clicked")
-    if (value == "Decode 3"):
-        print("Third button clicked")
-    if (value == "Decode 4"):
-        print("Fourth button clicked")
 
-    segemented_buttonDecoder.set("Value 5")
+    segemented_buttonDecoder.set("null")
 
-segemented_buttonDecoder = customtkinter.CTkSegmentedButton(master=frame,values=["Decode 1", "Decode 2", "Decode 3", "Decode 4"],command=segmented_button_callback)
+segemented_buttonDecoder = customtkinter.CTkSegmentedButton(master=frame,values=["Decode 1", "Decode OwnAlgo"],command=segmented_button_callback)
 segemented_buttonDecoder.pack(padx=20, pady=10)
 segemented_buttonDecoder.place(relx=0.5, rely=0.7, anchor=tkinter.CENTER)
 
