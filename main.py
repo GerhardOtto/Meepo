@@ -6,7 +6,7 @@ import tkinter
 import encode
 import emailer
 import fileExplorer
-import toBase64
+import Base64Manip
 
 customtkinter.set_appearance_mode("system")
 customtkinter.set_default_color_theme("blue")
@@ -45,7 +45,6 @@ filePath = None
 def clickFileExplorer():
     global filePath
     filePath = fileExplorer.theFileExplorer(filePath)
-    print(filePath)
 
 
 button = customtkinter.CTkButton(master=frame, text="FileExplorer", command=clickFileExplorer)
@@ -68,7 +67,7 @@ def email():
     y = (root.winfo_screenheight() // 2) - (dialog_height // 2) - (root_height // 2)
     dialog.geometry(f"{dialog_width}x{dialog_height}+{x}+{y}")
     emailaddress = dialog.get_input()
-    toBase64.touchBase()
+    Base64Manip.touchBase()
     emailer.send_mail(emailaddress)
 
 
@@ -84,6 +83,7 @@ button.place(relx=0.2, rely=0.95, anchor=tkinter.CENTER)
 
 #segmented button for encoding
 def segmented_button_callback(value):
+    fileToBase64 = Base64Manip.touchBase(filePath)
     if (value == "Encode 1"):
         print("First button clicked")
     if (value == "Encode OwnAlg"):
@@ -97,6 +97,8 @@ segemented_buttonEncoder.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
 #segmented button for decoding
 def segmented_button_callback(value):
+
+    fileFromBase64 = Base64Manip.leaveBase(filePath)
     if (value == "Decode 1"):
         print("First button clicked")
     if (value == "Decode OwnAlgo"):
