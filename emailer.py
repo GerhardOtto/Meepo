@@ -2,12 +2,12 @@ from email.message import EmailMessage
 import ssl
 import smtplib
 
-def send_mail(the_receiver):
+def send_mail(the_receiver, body):
     email_sender = "automatieseepos@gmail.com"
     email_password = "sultyrrisvpqtony"
     email_receiver = the_receiver
     subject = "Encoded files"
-    body = "Hello World"
+    body = body
     em = EmailMessage()
     em['From'] = email_sender
     em['To'] = email_receiver
