@@ -43,7 +43,8 @@ label.place(relx = 0.4, rely = 0.4)
 #fileExplorer button
 filePath = None
 def clickFileExplorer():
-    fileExplorer.theFileExplorer(filePath)
+    global filePath
+    filePath = fileExplorer.theFileExplorer(filePath)
     print(filePath)
 
 
