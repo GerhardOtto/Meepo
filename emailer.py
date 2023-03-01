@@ -2,7 +2,7 @@ from email.message import EmailMessage
 import ssl
 import smtplib
 
-def send_mail(the_receiver, body):
+def sendMail(the_receiver, body):
     email_sender = "automatieseepos@gmail.com"
     email_password = "sultyrrisvpqtony"
     email_receiver = the_receiver

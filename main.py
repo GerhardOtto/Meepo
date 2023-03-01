@@ -6,39 +6,36 @@ import tkinter
 import encode
 import emailer
 import fileExplorer
-import Base64Manip
+import base64Manip
 
 customtkinter.set_appearance_mode("system")
 customtkinter.set_default_color_theme("blue")
 
 root = customtkinter.CTk()
-root_width = 500
-root_height = 500
-screen_width = root.winfo_screenwidth()
-screen_height = root.winfo_screenheight()
-x = (screen_width // 2) - (root_width // 2)
+rootWidth = 500
+rootHeight = 500
+screenWidth = root.winfo_screenwidth()
+screenHeight = root.winfo_screenheight()
+x = (screenWidth // 2) - (rootWidth // 2)
 y = 100
-root.geometry(f"{root_width}x{root_height}+{x}+{y}")
-
-def closeProgram():
-    exit()
+root.geometry(f"{rootWidth}x{rootHeight}+{x}+{y}")
 
 frame = customtkinter.CTkFrame(master=root)
 frame.pack(pady=20, padx=60, fill="both", expand=True)
 
 #Title
-label = customtkinter.CTkLabel(master=frame, text="ENDEC", font=("Arial", 24))
-label.pack(pady=12, padx=10)
+labelTitle = customtkinter.CTkLabel(master=frame, text="ENDEC", font=("Arial", 24))
+labelTitle.pack(pady=12, padx=10)
 
-#Dencode title
-label = customtkinter.CTkLabel(master=frame, text="Dencode", font=("Arial", 24))
-label.pack(pady=12, padx=10)
-label.place(relx = 0.38, rely = 0.6)
+#decode title
+labelDecode = customtkinter.CTkLabel(master=frame, text="Dencode", font=("Arial", 24))
+labelDecode.pack(pady=12, padx=10)
+labelDecode.place(relx = 0.38, rely = 0.6)
 
-#Ecode title
-label = customtkinter.CTkLabel(master=frame, text="Encode", font=("Arial", 24))
-label.pack(pady=12, padx=10)
-label.place(relx = 0.4, rely = 0.4)
+#encode title
+labelEncode = customtkinter.CTkLabel(master=frame, text="Encode", font=("Arial", 24))
+labelEncode.pack(pady=12, padx=10)
+labelEncode.place(relx = 0.4, rely = 0.4)
 
 #fileExplorer button
 filePath = None
@@ -47,85 +44,86 @@ def clickFileExplorer():
     filePath = fileExplorer.theFileExplorer(filePath)
 
 
-button = customtkinter.CTkButton(master=frame, text="FileExplorer", command=clickFileExplorer)
-button.pack(pady=12, padx=10)
-button.place(relx=0.5, rely=0.3, anchor=tkinter.CENTER)
+buttonExplore = customtkinter.CTkButton(master=frame, text="FileExplorer", command=clickFileExplorer)
+buttonExplore.pack(pady=12, padx=10)
+buttonExplore.place(relx=0.5, rely=0.3, anchor=tkinter.CENTER)
 
 #close button
-button = customtkinter.CTkButton(master=frame, text="Close", command=closeProgram,width=120,height=32,border_width=1,corner_radius=8)
-button.pack(pady=12, padx = 10)
-button.place(relx=0.8, rely=0.95, anchor=tkinter.CENTER)
+def closeProgram():
+    exit()
 
-def email():
-    dialog = customtkinter.CTkInputDialog(text="Enter Email address:", title="Send Mail")
-    dialog_width = dialog.winfo_reqwidth()
-    dialog_height = dialog.winfo_reqheight()
-    root.update_idletasks()  # update the root window to get the correct values for its dimensions
-    root_width = root.winfo_width()
-    root_height = root.winfo_height()
-    x = (root.winfo_screenwidth() // 2) - (dialog_width // 2)
-    y = (root.winfo_screenheight() // 2) - (dialog_height // 2) - (root_height // 2)
-    dialog.geometry(f"{dialog_width}x{dialog_height}+{x}+{y}")
-    emailaddress = dialog.get_input()
-    Base64Manip.touchBase()
-    emailer.send_mail(emailaddress)
 
+buttonExit = customtkinter.CTkButton(master=frame, text="Close", command=closeProgram,width=120,height=32,border_width=1,corner_radius=8)
+buttonExit.pack(pady=12, padx = 10)
+buttonExit.place(relx=0.8, rely=0.95, anchor=tkinter.CENTER)
 
 #email button
-button = customtkinter.CTkButton(master=frame, text="Email", command=email,width=120,height=32,border_width=1,corner_radius=8)
-button.pack(pady=12, padx = 10)
-button.place(relx=0.2, rely=0.95, anchor=tkinter.CENTER)
+def email():
+    dialog = customtkinter.CTkInputDialog(text="Enter Email address:", title="Send Mail")
+    dialogWidth = dialog.winfo_reqwidth()
+    dialogHeight = dialog.winfo_reqheight()
+    root.update_idletasks()  # update the root window to get the correct values for its dimensions
+    rootHeight = root.winfo_height()
+    x = (root.winfo_screenwidth() // 2) - (dialogWidth // 2)
+    y = (root.winfo_screenheight() // 2) - (dialogHeight // 2) - (rootHeight // 2)
+    dialog.geometry(f"{dialogWidth}x{dialogHeight}+{x}+{y}")
+    emailAddress = dialog.get_input()
+    base64Manip.touchBase()
+    if emailAddress != None:
+        emailer.sendMail(emailAddress)
 
-#progress bar
-#progressbar = customtkinter.CTkProgressBar(master=frame,width=160,height=20,border_width=5, indeterminate_speed=True)
-#progressbar.place(relx=0.5, rely=0.82, anchor=tkinter.CENTER)
-#progressbar.set(0)
+
+buttonEmail = customtkinter.CTkButton(master=frame, text="Email", command=email,width=120,height=32,border_width=1,corner_radius=8)
+buttonEmail.pack(pady=12, padx = 10)
+buttonEmail.place(relx=0.2, rely=0.95, anchor=tkinter.CENTER)
 
 #segmented button for encoding
-def segmented_button_callback(value):
-    fileToBase64 = Base64Manip.touchBase(filePath)
+def clickSegmentedButtonEncode(value):
+    fileToBase64 = base64Manip.touchBase(filePath)
     if (value == "Encode 1"):
         print("First button clicked")
     if (value == "Encode OwnAlg"):
         print("Seccond button clicked")
         
-    segemented_buttonEncoder.set("null")
+    segementedButtonEncoder.set("null")
 
-segemented_buttonEncoder = customtkinter.CTkSegmentedButton(master=frame,values=["Encode 1", "Encode OwnAlg"],command=segmented_button_callback)
-segemented_buttonEncoder.pack(padx=20, pady=10)
-segemented_buttonEncoder.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
+
+segementedButtonEncoder = customtkinter.CTkSegmentedButton(master=frame,values=["Encode 1", "Encode OwnAlg"],command=clickSegmentedButtonEncode)
+segementedButtonEncoder.pack(padx=20, pady=10)
+segementedButtonEncoder.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
 #segmented button for decoding
-def segmented_button_callback(value):
+def clickSegmentedButtonDecode(value):
 
-    fileFromBase64 = Base64Manip.leaveBase(filePath)
+    fileFromBase64 = base64Manip.leaveBase(filePath)
     if (value == "Decode 1"):
         print("First button clicked")
     if (value == "Decode OwnAlgo"):
         print("Seccond button clicked")
 
-    segemented_buttonDecoder.set("null")
+    segementedButtonDecoder.set("null")
 
-segemented_buttonDecoder = customtkinter.CTkSegmentedButton(master=frame,values=["Decode 1", "Decode OwnAlgo"],command=segmented_button_callback)
-segemented_buttonDecoder.pack(padx=20, pady=10)
-segemented_buttonDecoder.place(relx=0.5, rely=0.7, anchor=tkinter.CENTER)
 
-#input dialog
-def button_click_event():
-    dialog = customtkinter.CTkInputDialog(text="Type in a custom key:", title="Custom Key")
-    dialog_width = dialog.winfo_reqwidth()
-    dialog_height = dialog.winfo_reqheight()
+segementedButtonDecoder = customtkinter.CTkSegmentedButton(master=frame,values=["Decode 1", "Decode OwnAlgo"],command=clickSegmentedButtonDecode)
+segementedButtonDecoder.pack(padx=20, pady=10)
+segementedButtonDecoder.place(relx=0.5, rely=0.7, anchor=tkinter.CENTER)
+
+#password
+def clickPassword():
+    dialog = customtkinter.CTkInputDialog(text="Type in a password:", title="Password")
+    dialogWidth = dialog.winfo_reqwidth()
+    dialogHeight = dialog.winfo_reqheight()
     root.update_idletasks()  # update the root window to get the correct values for its dimensions
-    root_width = root.winfo_width()
-    root_height = root.winfo_height()
-    x = (root.winfo_screenwidth() // 2) - (dialog_width // 2)
-    y = (root.winfo_screenheight() // 2) - (dialog_height // 2) - (root_height // 2)
-    dialog.geometry(f"{dialog_width}x{dialog_height}+{x}+{y}")
-    print("Password:", dialog.get_input())
+    rootWidth = root.winfo_width()
+    rootHeight = root.winfo_height()
+    x = (root.winfo_screenwidth() // 2) - (dialogWidth // 2)
+    y = (root.winfo_screenheight() // 2) - (dialogHeight // 2) - (rootHeight // 2)
+    dialog.geometry(f"{dialogWidth}x{dialogHeight}+{x}+{y}")
+    #print("Password:", dialog.get_input())
 
 
-button = customtkinter.CTkButton(root, text="Custom Key", command=button_click_event)
-button.pack(pady=12, padx = 10)
-button.place(relx=0.5, rely=0.2, anchor=tkinter.CENTER)
+buttonPassword = customtkinter.CTkButton(root, text="Enter Password", command=clickPassword)
+buttonPassword.pack(pady=12, padx = 10)
+buttonPassword.place(relx=0.5, rely=0.2, anchor=tkinter.CENTER)
 
 root.mainloop()
