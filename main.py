@@ -78,12 +78,15 @@ buttonEmail.pack(pady=12, padx = 10)
 buttonEmail.place(relx=0.2, rely=0.95, anchor=tkinter.CENTER)
 
 #segmented button for encoding
+encodedString = None
 def clickSegmentedButtonEncode(value):
+    global encodedString
     fileToBase64 = base64Manip.touchBase(filePath)
     if (value == "Encode 1"):
-        print("First button clicked")
+        print(encodedString + " not done yet!")
     if (value == "Encode OwnAlg"):
-        print("Seccond button clicked")
+        encodedString = encode.ownAlgoEncoder(fileToBase64,password)
+        print(encodedString)
         
     segementedButtonEncoder.set("null")
 
@@ -109,7 +112,9 @@ segementedButtonDecoder.pack(padx=20, pady=10)
 segementedButtonDecoder.place(relx=0.5, rely=0.7, anchor=tkinter.CENTER)
 
 #password
+password = None
 def clickPassword():
+    global password
     dialog = customtkinter.CTkInputDialog(text="Type in a password:", title="Password")
     dialogWidth = dialog.winfo_reqwidth()
     dialogHeight = dialog.winfo_reqheight()
@@ -119,6 +124,7 @@ def clickPassword():
     x = (root.winfo_screenwidth() // 2) - (dialogWidth // 2)
     y = (root.winfo_screenheight() // 2) - (dialogHeight // 2) - (rootHeight // 2)
     dialog.geometry(f"{dialogWidth}x{dialogHeight}+{x}+{y}")
+    password = dialog.get_input()
     #print("Password:", dialog.get_input())
 
 
