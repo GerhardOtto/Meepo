@@ -3,7 +3,7 @@
 
 import customtkinter
 import tkinter
-import encode
+import endec
 import emailer
 import fileExplorer
 import base64Manip
@@ -82,10 +82,11 @@ encodedString = None
 def clickSegmentedButtonEncode(value):
     global encodedString
     fileToBase64 = base64Manip.touchBase(filePath)
+    hashedPassword = endec.hashSlingingSlasher(password)
     if (value == "Encode 1"):
         print(encodedString + " not done yet!")
     if (value == "Encode OwnAlg"):
-        encodedString = encode.ownAlgoEncoder(fileToBase64,password)
+        encodedString = endec.ownAlgoEncoder(fileToBase64,hashedPassword)
         print(encodedString)
         
     segementedButtonEncoder.set("null")
