@@ -7,6 +7,7 @@ import endec
 import emailer
 import fileExplorer
 import base64Manip
+import readWrite
 
 customtkinter.set_appearance_mode("system")
 customtkinter.set_default_color_theme("blue")
@@ -82,7 +83,6 @@ encodedString = None
 def clickSegmentedButtonEncode(value):
     global encodedString
     fileToBase64 = base64Manip.touchBase(filePath)
-    hashedPassword = endec.hashSlingingSlasher(password)
     if (value == "Encode 1"):
         print(encodedString + " not done yet!")
     if (value == "Encode OwnAlg"):
@@ -98,14 +98,18 @@ segementedButtonEncoder.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
 #segmented button for decoding
 def clickSegmentedButtonDecode(value):
-
-    fileFromBase64 = base64Manip.leaveBase(filePath)
     if (value == "Decode 1"):
         print("First button clicked")
+        encodedText = readWrite.read(hashedPassword,filePath)
+        decodedText = endec.rsaAlgoDecoder(encodedText)
+        base64Text = base64Manip.leaveBase(decodedText)
     if (value == "Decode OwnAlgo"):
         print("Seccond button clicked")
+        base64Text = base64Manip.leaveBase(filePath)
 
     segementedButtonDecoder.set("null")
+
+    return base64Text
 
 
 segementedButtonDecoder = customtkinter.CTkSegmentedButton(master=frame,values=["Decode 1", "Decode OwnAlgo"],command=clickSegmentedButtonDecode)
@@ -113,9 +117,9 @@ segementedButtonDecoder.pack(padx=20, pady=10)
 segementedButtonDecoder.place(relx=0.5, rely=0.7, anchor=tkinter.CENTER)
 
 #password
-password = None
+hashedPassword = None
 def clickPassword():
-    global password
+    global hashedPassword
     dialog = customtkinter.CTkInputDialog(text="Type in a password:", title="Password")
     dialogWidth = dialog.winfo_reqwidth()
     dialogHeight = dialog.winfo_reqheight()
@@ -126,6 +130,7 @@ def clickPassword():
     y = (root.winfo_screenheight() // 2) - (dialogHeight // 2) - (rootHeight // 2)
     dialog.geometry(f"{dialogWidth}x{dialogHeight}+{x}+{y}")
     password = dialog.get_input()
+    hashedPassword = endec.hashSlingingSlasher(password)
     #print("Password:", dialog.get_input())
 
 
