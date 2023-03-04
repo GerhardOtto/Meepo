@@ -69,7 +69,7 @@ def email():
     y = (root.winfo_screenheight() // 2) - (dialogHeight // 2) - (rootHeight // 2)
     dialog.geometry(f"{dialogWidth}x{dialogHeight}+{x}+{y}")
     emailAddress = dialog.get_input()
-    base64Manip.touchBase()
+    base64Manip.touchBase(filePath)
     if emailAddress != None:
         emailer.sendMail(emailAddress)
 
@@ -83,10 +83,9 @@ encodedString = None
 def clickSegmentedButtonEncode(value):
     global encodedString
     fileToBase64 = base64Manip.touchBase(filePath)
-    if (value == "Encode 1"):
-        encodedString = endec.rsaAlgoEncoder(fileToBase64,hashedPassword)
-        readWrite.write(encodedString,hashedPassword)
-        print(encodedString + " not done yet!")
+    if (value == "RSA Encode"):
+        encodedString = endec.rsaAlgoEncoder(fileToBase64,"hashedPassword")
+        readWrite.write(encodedString,"hashedPassword")
     if (value == "Encode OwnAlg"):
         encodedString = endec.ownAlgoEncoder(fileToBase64,hashedPassword)
         print(encodedString)
@@ -94,17 +93,19 @@ def clickSegmentedButtonEncode(value):
     segementedButtonEncoder.set("null")
 
 
-segementedButtonEncoder = customtkinter.CTkSegmentedButton(master=frame,values=["Encode 1", "Encode OwnAlg"],command=clickSegmentedButtonEncode)
+segementedButtonEncoder = customtkinter.CTkSegmentedButton(master=frame,values=["RSA Encode", "Encode OwnAlg"],command=clickSegmentedButtonEncode)
 segementedButtonEncoder.pack(padx=20, pady=10)
 segementedButtonEncoder.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
 #segmented button for decoding
 def clickSegmentedButtonDecode(value):
-    if (value == "Decode 1"):
+    if (value == "RSA Decode"):
         print("First button clicked")
-        encodedText = readWrite.read(hashedPassword,filePath)
-        decodedText = endec.rsaAlgoDecoder(encodedText)
+        encodedText = readWrite.read("hashedPassword",filePath)
+        decodedText = endec.rsaAlgoDecoder(encodedText, "hashedPassword")
         base64Text = base64Manip.leaveBase(decodedText)
+        print(base64Text)
+
     if (value == "Decode OwnAlgo"):
         print("Seccond button clicked")
         base64Text = base64Manip.leaveBase(filePath)
@@ -114,7 +115,7 @@ def clickSegmentedButtonDecode(value):
     return base64Text
 
 
-segementedButtonDecoder = customtkinter.CTkSegmentedButton(master=frame,values=["Decode 1", "Decode OwnAlgo"],command=clickSegmentedButtonDecode)
+segementedButtonDecoder = customtkinter.CTkSegmentedButton(master=frame,values=["RSA Decode", "Decode OwnAlgo"],command=clickSegmentedButtonDecode)
 segementedButtonDecoder.pack(padx=20, pady=10)
 segementedButtonDecoder.place(relx=0.5, rely=0.7, anchor=tkinter.CENTER)
 

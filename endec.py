@@ -36,11 +36,20 @@ def rsaAlgoEncoder(base64, hashedPassword):
     return encodedText
 
 def ownAlgoEncoder(base64, hashedPassword):
-
     encodedText = hashedPassword + base64
     
     return encodedText
 
 
-def rsaAlgoDecoder(encodedText):
-    print("Hello")
+def rsaAlgoDecoder(encodedText, hashedPassword):
+    
+    encodedLength = len(encodedText)
+    for i in range(encodedLength):
+        currentChar = encodedText[i]
+        asciiValue = ord(currentChar)
+        cypherNum = (asciiValue ** 11) % 14
+        cypherChar = chr(cypherNum)
+        #cypherChar = round(cypherChar)
+        decodedText += cypherChar
+
+    return decodedText

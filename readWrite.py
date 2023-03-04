@@ -9,10 +9,11 @@ def write(encodedText,hashedPassword):
         print("Password already in use!")
 
 
-def read(hashedPassword,filePath):
+def read(hashedPassword, filePath):
     try:
         with open(filePath, "r") as file:
             fileName = os.path.basename(filePath)
+            encodedText = file.read()
             if hashedPassword == fileName:
                 encodedText = file.read()
 
