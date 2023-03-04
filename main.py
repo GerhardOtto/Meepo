@@ -84,6 +84,8 @@ def clickSegmentedButtonEncode(value):
     global encodedString
     fileToBase64 = base64Manip.touchBase(filePath)
     if (value == "Encode 1"):
+        encodedString = endec.rsaAlgoEncoder(fileToBase64,hashedPassword)
+        readWrite.write(encodedString,hashedPassword)
         print(encodedString + " not done yet!")
     if (value == "Encode OwnAlg"):
         encodedString = endec.ownAlgoEncoder(fileToBase64,hashedPassword)

@@ -5,7 +5,7 @@ def hashSlingingSlasher(password):
     hashObject = hashlib.sha256()
     hashObject.update(passwordBytes)
     hashedPassword = hashObject.hexdigest()
-
+    print(hashedPassword)
     return hashedPassword
 
 
@@ -29,7 +29,7 @@ def rsaAlgoEncoder(base64, hashedPassword):
         asciiValue = ord(currentChar)
         cypherNum = (asciiValue ** 5) % 14
         cypherChar = chr(cypherNum)
-
+        #line below doesnt work, cant be encodedText = encodedText if encodedText = None
         encodedText = encodedText + cypherChar
 
 

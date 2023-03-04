@@ -8,8 +8,6 @@ def write(encodedText,hashedPassword):
     except OSError:
         print("Password already in use!")
 
-        return None
-
 
 def read(hashedPassword,filePath):
     try:
@@ -22,5 +20,3 @@ def read(hashedPassword,filePath):
 
     except FileNotFoundError:
         print("Password not found!")
-
-        return None
