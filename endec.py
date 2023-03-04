@@ -28,7 +28,7 @@ def rsaAlgoEncoder(base64, hashedPassword):
         currentChar = base64[i]
         asciiValue = ord(currentChar)
         cypherNum = (asciiValue ** 5) % 14
-        cypherChar = chr(cypherNum)
+        cypherChar = chr(cypherNum).encode('unicode_escape').decode()
         encodedText += cypherChar
 
     encodedText = hashedPassword + encodedText
@@ -42,12 +42,12 @@ def ownAlgoEncoder(base64, hashedPassword):
 
 
 def rsaAlgoDecoder(encodedText, hashedPassword):
-    
+    decodedText = ""
     encodedLength = len(encodedText)
     for i in range(encodedLength):
         currentChar = encodedText[i]
-        asciiValue = ord(currentChar)
-        cypherNum = (asciiValue ** 11) % 14
+        unicoceValue = ord(currentChar)
+        cypherNum = (unicoceValue ** 11) % 14
         cypherChar = chr(cypherNum)
         #cypherChar = round(cypherChar)
         decodedText += cypherChar

@@ -1,6 +1,6 @@
 import os
 
-def write(encodedText,hashedPassword):
+def writeEncodedText(encodedText,hashedPassword):
     try:
         file = open(hashedPassword + ".txt", "w")
         file.write(encodedText)
@@ -9,7 +9,7 @@ def write(encodedText,hashedPassword):
         print("Password already in use!")
 
 
-def read(hashedPassword, filePath):
+def readEncodedText(hashedPassword, filePath):
     try:
         with open(filePath, "r") as file:
             fileName = os.path.basename(filePath)
