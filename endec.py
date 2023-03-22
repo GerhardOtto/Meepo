@@ -16,7 +16,6 @@ def compareAndDecode(password,encodedText,decodedText):
             decodedText = rsaAlgoDecoder(encodedText)
         else:
              decodedText = "Nice try!"
-        
 
         return decodedText
 
@@ -28,7 +27,7 @@ def rsaAlgoEncoder(base64, hashedPassword):
         currentChar = base64[i]
         asciiValue = ord(currentChar)
         cypherNum = (asciiValue ** 5) % 14
-        cypherChar = chr(cypherNum).encode('unicode_escape').decode()
+        cypherChar = chr(cypherNum)
         encodedText += cypherChar
 
     encodedText = hashedPassword + encodedText

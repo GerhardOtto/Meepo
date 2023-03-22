@@ -6,7 +6,7 @@ import tkinter
 import endec
 import emailer
 import fileExplorer
-import base64Manip
+import binary
 import readWrite
 
 customtkinter.set_appearance_mode("system")
@@ -29,7 +29,7 @@ labelTitle = customtkinter.CTkLabel(master=frame, text="ENDEC", font=("Arial", 2
 labelTitle.pack(pady=12, padx=10)
 
 #decode title
-labelDecode = customtkinter.CTkLabel(master=frame, text="Dencode", font=("Arial", 24))
+labelDecode = customtkinter.CTkLabel(master=frame, text="Decode", font=("Arial", 24))
 labelDecode.pack(pady=12, padx=10)
 labelDecode.place(relx = 0.38, rely = 0.6)
 
@@ -69,7 +69,7 @@ def email():
     y = (root.winfo_screenheight() // 2) - (dialogHeight // 2) - (rootHeight // 2)
     dialog.geometry(f"{dialogWidth}x{dialogHeight}+{x}+{y}")
     emailAddress = dialog.get_input()
-    base64Manip.touchBase(filePath)
+    binary.touchBase(filePath)
     if emailAddress != None:
         emailer.sendMail(emailAddress)
 
@@ -82,7 +82,7 @@ buttonEmail.place(relx=0.2, rely=0.95, anchor=tkinter.CENTER)
 encodedString = None
 def clickSegmentedButtonEncode(value):
     global encodedString
-    base64Text = base64Manip.touchBase(filePath)
+    base64Text = binary.touchBase(filePath)
     if (value == "RSA Encode"):
         encodedString = endec.rsaAlgoEncoder(base64Text,"hashedPassword")#bugHere
         print("encoded string to follow: " + encodedString + "X")
@@ -104,12 +104,12 @@ def clickSegmentedButtonDecode(value):
         print("First button clicked")
         encodedText = readWrite.readEncodedText("hashedPassword",filePath)
         decodedText = endec.rsaAlgoDecoder(encodedText, "hashedPassword")
-        base64Text = base64Manip.leaveBase(decodedText)
+        base64Text = binary.leaveBase(decodedText)
         print(base64Text)
 
     if (value == "Decode OwnAlgo"):
         print("Seccond button clicked")
-        base64Text = base64Manip.leaveBase(filePath)
+        base64Text = binary.leaveBase(filePath)
 
     segementedButtonDecoder.set("null")
 
