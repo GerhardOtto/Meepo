@@ -69,7 +69,7 @@ def email():
     y = (root.winfo_screenheight() // 2) - (dialogHeight // 2) - (rootHeight // 2)
     dialog.geometry(f"{dialogWidth}x{dialogHeight}+{x}+{y}")
     emailAddress = dialog.get_input()
-    binary.touchBase(filePath)
+    binary.encodeToBinary(filePath)
     if emailAddress != None:
         emailer.sendMail(emailAddress)
 
@@ -82,7 +82,7 @@ buttonEmail.place(relx=0.2, rely=0.95, anchor=tkinter.CENTER)
 encodedString = None
 def clickSegmentedButtonEncode(value):
     global encodedString
-    base64Text = binary.touchBase(filePath)
+    base64Text = binary.encodeToBinary(filePath)
     if (value == "RSA Encode"):
         encodedString = endec.rsaAlgoEncoder(base64Text,"hashedPassword")#bugHere
         print("encoded string to follow: " + encodedString + "X")
@@ -104,12 +104,12 @@ def clickSegmentedButtonDecode(value):
         print("First button clicked")
         encodedText = readWrite.readEncodedText("hashedPassword",filePath)
         decodedText = endec.rsaAlgoDecoder(encodedText, "hashedPassword")
-        base64Text = binary.leaveBase(decodedText)
+        base64Text = binary.decodeFromBinary(decodedText)
         print(base64Text)
 
     if (value == "Decode OwnAlgo"):
         print("Seccond button clicked")
-        base64Text = binary.leaveBase(filePath)
+        base64Text = binary.decodeFromBinary(filePath)
 
     segementedButtonDecoder.set("null")
 
