@@ -82,13 +82,13 @@ buttonEmail.place(relx=0.2, rely=0.95, anchor=tkinter.CENTER)
 encodedString = None
 def clickSegmentedButtonEncode(value):
     global encodedString
-    base64Text = binary.encodeToBinary(filePath)
+    binaryString = binary.encodeToBinary(filePath)
     if (value == "RSA Encode"):
-        encodedString = endec.rsaAlgoEncoder(base64Text,"hashedPassword")#bugHere
+        encodedString = endec.rsaAlgoEncoder(binaryString,"hashedPassword")#bugHere
         print("encoded string to follow: " + encodedString + "X")
         readWrite.writeEncodedText(encodedString,"hashedPassword")
     if (value == "Encode OwnAlg"):
-        encodedString = endec.ownAlgoEncoder(base64Text,hashedPassword)
+        encodedString = endec.ownAlgoEncoder(binaryString,hashedPassword)
         print(encodedString)
         
     segementedButtonEncoder.set("null")

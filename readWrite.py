@@ -2,7 +2,7 @@ import os
 
 def writeEncodedText(encodedText,hashedPassword):
     try:
-        file = open(hashedPassword + ".txt", "w")
+        file = open(hashedPassword + ".txt", "w+")
         file.write(encodedText)
         file.close()
     except OSError:

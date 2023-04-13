@@ -20,16 +20,17 @@ def compareAndDecode(password,encodedText,decodedText):
         return decodedText
 
 
-def rsaAlgoEncoder(base64, hashedPassword):
-    baseLength = len(base64)
+def rsaAlgoEncoder(binary, hashedPassword):
+    binaryLen = len(binary)
     encodedText = ""
-    for i in range(baseLength):
-        currentChar = base64[i]
-        asciiValue = ord(currentChar)
-        cypherNum = (asciiValue ** 5) % 14
-        cypherChar = chr(cypherNum)
-        encodedText += cypherChar
-
+    for i in range(binaryLen):
+        currentChar = binary[i]
+        print(currentChar)
+        cypherNum = (currentChar ** 5) % 14
+        print(cypherNum)
+        encodedText = cypherNum 
+        # convert it to bytes
+    encodedText = str(encodedText)
     encodedText = hashedPassword + encodedText
     
     return encodedText
