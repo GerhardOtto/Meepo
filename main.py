@@ -1,6 +1,3 @@
-#use google auth for password
-#diffie-hellman key exchange
-
 import customtkinter
 import tkinter
 import endec

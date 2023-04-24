@@ -35,10 +35,26 @@ def rsaAlgoEncoder(binary, hashedPassword):
     
     return encodedText
 
-def ownAlgoEncoder(base64, hashedPassword):
-    encodedText = hashedPassword + base64
+def ownAlgoEncoder(binary, hashedPassword):
+
+    n = len(binary)
+    encodedText = ''
+    for i in range(n):
+        if i % 2 == 0:
+            encodedText += input[n - i//2 - 1]
+        else:
+            encodedText += input[i//2]
     
     return encodedText
+
+
+def ownAlgoDecoder(encodedText, hashedPassword):
+
+    # remove hashedpassword
+    # loop 3 tiems
+    # save output
+
+    return decodedText
 
 
 def rsaAlgoDecoder(encodedText, hashedPassword):
