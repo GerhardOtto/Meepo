@@ -9,16 +9,6 @@ def hashSlingingSlasher(password):
     return hashedPassword
 
 
-# def compareAndDecode(password,encodedText,decodedText):
-#     passwordLength = len(password)
-#     for i in range(passwordLength):
-#         if password[i] == encodedText[i]:
-#             decodedText = rsaAlgoDecoder(encodedText)
-#         else:
-#              decodedText = "Nice try!"
-
-#         return decodedText
-
 
 def rsaAlgoEncoder(binary, hashedPassword):
     binaryLen = len(binary)
@@ -35,16 +25,6 @@ def rsaAlgoEncoder(binary, hashedPassword):
     
     return encodedText
 
-# def ownAlgoEncoder(binaryFilePath, hashedPassword):
-#     n = len(binaryFilePath)
-#     encodedText = ''
-#     for i in range(n):
-#         if i % 2 == 0:
-#             encodedText += input[n - i//2 - 1]
-#         else:
-#             encodedText += input[i//2]
-    
-#     return encodedText
 
 def ownAlgoEncoder(data, hashedPassword):
     n = len(data)
@@ -56,15 +36,6 @@ def ownAlgoEncoder(data, hashedPassword):
     return encodedData
 
 
-# def ownAlgoDecoder(encodedText, hashedPassword):
-#     # save output
-#     for i in range(3):
-#         encodedText = ownAlgoEncoder(encodedText, hashedPassword)
-
-
-#     decodedText = encodedText
-
-#     return decodedText
 
 def ownAlgoDecoder(encodedData, hashedPassword):
     n = len(encodedData)
