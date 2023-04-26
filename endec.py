@@ -46,14 +46,14 @@ def rsaAlgoEncoder(binary, hashedPassword):
     
 #     return encodedText
 
-def ownAlgoEncoder(data, hashed_password):
+def ownAlgoEncoder(data, hashedPassword):
     n = len(data)
-    hashed_password_bytes = bytearray(hashed_password, "utf-8")
-    encoded_data = bytearray(n)
+    hashedPasswordBytes = bytearray(hashedPassword, "utf-8")
+    encodedData = bytearray(n)
     for i in range(n):
-        encoded_data[i] = data[n - i - 1] ^ hashed_password_bytes[i % len(hashed_password_bytes)]
+        encodedData[i] = data[n - i - 1] ^ hashedPasswordBytes[i % len(hashedPasswordBytes)]
     
-    return encoded_data
+    return encodedData
 
 
 # def ownAlgoDecoder(encodedText, hashedPassword):
@@ -66,14 +66,14 @@ def ownAlgoEncoder(data, hashed_password):
 
 #     return decodedText
 
-def ownAlgoDecoder(encoded_data, hashed_password):
-    n = len(encoded_data)
-    hashed_password_bytes = bytearray(hashed_password, "utf-8")
-    decoded_data = bytearray(n)
+def ownAlgoDecoder(encodedData, hashedPassword):
+    n = len(encodedData)
+    hashedPasswordBytes = bytearray(hashedPassword, "utf-8")
+    decodedData = bytearray(n)
     for i in range(n):
-        decoded_data[i] = encoded_data[n - i - 1] ^ hashed_password_bytes[i % len(hashed_password_bytes)]
+        decodedData[i] = encodedData[n - i - 1] ^ hashedPasswordBytes[i % len(hashedPasswordBytes)]
     
-    return decoded_data
+    return decodedData
 
 
 def rsaAlgoDecoder(encodedText, hashedPassword):
