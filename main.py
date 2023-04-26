@@ -68,7 +68,7 @@ def email():
     emailAddress = dialog.get_input()
     binary.encodeToBinary(filePath)
     if emailAddress != None:
-        emailer.sendMail(emailAddress)
+        emailer.sendMail(emailAddress,filePath)
 
 
 buttonEmail = customtkinter.CTkButton(master=frame, text="Email", command=email,width=120,height=32,border_width=1,corner_radius=8)
