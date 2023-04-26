@@ -1,6 +1,21 @@
 import os
 import endec
 
+def decodeWithOwnAlgo(filepath, hashedPassword, decoded_filepath='~/Desktop/decoded_file'):
+    if not decoded_filepath.endswith('.txt'):
+        decoded_filepath += '.txt'
+    decoded_filepath = os.path.expanduser(decoded_filepath)
+
+    with open(filepath, "rb") as file:
+        fileData = file.read()
+
+    decodedData = endec.ownAlgoDecoder(fileData, hashedPassword)
+
+    with open(decoded_filepath, "wb") as file:
+        file.write(decodedData)
+
+
+
 def encodeWithOwnAlgo(filepath, hashedPassword):
     with open(filepath, "rb") as file:
         fileData = file.read()

@@ -85,9 +85,7 @@ def clickSegmentedButtonEncode(value):
         print("encoded string to follow: " + encodedString + "X")
         readWrite.writeEncodedText(encodedString,"hashedPassword")
     if (value == "Encode OwnAlgo"):
-        print("Seccond button clicked")
-        encodedString = readWrite.encodeWithOwnAlgo(filePath,hashedPassword)
-        print(encodedString)
+        readWrite.encodeWithOwnAlgo(filePath,hashedPassword)
         
     segementedButtonEncoder.set("null")
 
@@ -102,16 +100,15 @@ def clickSegmentedButtonDecode(value):
         print("First button clicked")
         encodedText = readWrite.readEncodedText("hashedPassword",filePath)
         decodedText = endec.rsaAlgoDecoder(encodedText, "hashedPassword")
-        base64Text = binary.decodeFromBinary(decodedText)
-        print(base64Text)
+        originalFile = binary.decodeFromBinary(decodedText)
+        print(originalFile)
 
     if (value == "Decode OwnAlgo"):
-        print("Seccond button clicked")
-        base64Text = binary.decodeFromBinary(filePath)
+        print("Now decoding...")
+        readWrite.decodeWithOwnAlgo(filePath,hashedPassword)
+        print("Decoded!")
 
     segementedButtonDecoder.set("null")
-
-    return base64Text
 
 
 segementedButtonDecoder = customtkinter.CTkSegmentedButton(master=frame,values=["RSA Decode", "Decode OwnAlgo"],command=clickSegmentedButtonDecode)
