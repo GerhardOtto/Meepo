@@ -1,18 +1,17 @@
 import os
 import endec
 
-def decodeWithOwnAlgo(filepath, hashedPassword, decodedFilepath='~/Desktop/decoded_file'):
-    if not decodedFilepath.endswith('.txt'):
-        decodedFilepath += '.txt'
-    decodedFilepath = os.path.expanduser(decodedFilepath)
-
+def decodeWithOwnAlgo(filepath, hashedPassword):
     with open(filepath, "rb") as file:
         fileData = file.read()
 
     decodedData = endec.ownAlgoDecoder(fileData, hashedPassword)
+    fileDir, fileName = os.path.split(filepath)
+    decodedFilepath = os.path.join(fileDir, f"{fileName[:-8]}")
 
     with open(decodedFilepath, "wb") as file:
         file.write(decodedData)
+
 
 
 
