@@ -1,4 +1,15 @@
 import os
+import endec
+
+def encodeWithOwnAlgo(filepath, hashedPassword):
+    with open(filepath, "rb") as file:
+        fileData = file.read()
+
+    encodedData = endec.ownAlgoEncoder(fileData, hashedPassword)
+
+    encodedFilepath = filepath + ".encoded"
+    with open(encodedFilepath, "wb") as file:
+        file.write(encodedData)
 
 def writeEncodedText(encodedText,hashedPassword):
     try:

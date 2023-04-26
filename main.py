@@ -84,14 +84,15 @@ def clickSegmentedButtonEncode(value):
         encodedString = endec.rsaAlgoEncoder(binaryString,"hashedPassword")#bugHere
         print("encoded string to follow: " + encodedString + "X")
         readWrite.writeEncodedText(encodedString,"hashedPassword")
-    if (value == "Encode OwnAlg"):
-        encodedString = endec.ownAlgoEncoder(binaryString,hashedPassword)
+    if (value == "Encode OwnAlgo"):
+        print("Seccond button clicked")
+        encodedString = readWrite.encodeWithOwnAlgo(filePath,hashedPassword)
         print(encodedString)
         
     segementedButtonEncoder.set("null")
 
 
-segementedButtonEncoder = customtkinter.CTkSegmentedButton(master=frame,values=["RSA Encode", "Encode OwnAlg"],command=clickSegmentedButtonEncode)
+segementedButtonEncoder = customtkinter.CTkSegmentedButton(master=frame,values=["RSA Encode", "Encode OwnAlgo"],command=clickSegmentedButtonEncode)
 segementedButtonEncoder.pack(padx=20, pady=10)
 segementedButtonEncoder.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
