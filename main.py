@@ -86,6 +86,7 @@ def clickSegmentedButtonEncode(value):
         readWrite.writeEncodedText(encodedString,"hashedPassword")
     if (value == "Encode OwnAlgo"):
         readWrite.encodeWithOwnAlgo(filePath,hashedPassword)
+        print("Done!")
         
     segementedButtonEncoder.set("null")
 
@@ -104,9 +105,9 @@ def clickSegmentedButtonDecode(value):
         print(originalFile)
 
     if (value == "Decode OwnAlgo"):
-        print("Now decoding...")
+        print("Now starting...")
         readWrite.decodeWithOwnAlgo(filePath,hashedPassword)
-        print("Decoded!")
+        print("Done!")
 
     segementedButtonDecoder.set("null")
 

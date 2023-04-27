@@ -5,9 +5,8 @@ def hashSlingingSlasher(password):
     hashObject = hashlib.sha256()
     hashObject.update(passwordBytes)
     hashedPassword = hashObject.hexdigest()
-    print(hashedPassword)
-    return hashedPassword
 
+    return hashedPassword
 
 
 def rsaAlgoEncoder(binary, hashedPassword):
@@ -34,7 +33,6 @@ def ownAlgoEncoder(data, hashedPassword):
         encodedData[i] = data[n - i - 1] ^ hashedPasswordBytes[i % len(hashedPasswordBytes)]
     
     return encodedData
-
 
 
 def ownAlgoDecoder(encodedData, hashedPassword):
