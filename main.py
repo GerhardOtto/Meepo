@@ -5,6 +5,7 @@ import emailer
 import fileExplorer
 import binary
 import readWrite
+import aes
 
 customtkinter.set_appearance_mode("system")
 customtkinter.set_default_color_theme("blue")
@@ -80,39 +81,52 @@ encodedString = None
 def clickSegmentedButtonEncode(value):
     global encodedString
     binaryString = binary.encodeToBinary(filePath)
-    if (value == "RSA Encode"):
-        encodedString = endec.rsaAlgoEncoder(binaryString,"hashedPassword")#bugHere
-        print("encoded string to follow: " + encodedString + "X")
-        readWrite.writeEncodedText(encodedString,"hashedPassword")
+    # if (value == "AES Encode"):
+    #     encodedString = endec.AESAlgoEncoder(binaryString,"hashedPassword")#bugHere
+    #     print("encoded string to follow: " + encodedString + "X")
+    #     readWrite.writeEncodedText(encodedString,"hashedPassword")
+
     if (value == "Encode OwnAlgo"):
+        print("Now starting...")
         readWrite.encodeWithOwnAlgo(filePath,hashedPassword)
+        print("Done!")
+
+    elif (value == "AES Encode"):
+        print("Now starting...")
+        aes.encrypt(filePath,aes.load_key())
         print("Done!")
         
     segementedButtonEncoder.set("null")
 
 
-segementedButtonEncoder = customtkinter.CTkSegmentedButton(master=frame,values=["RSA Encode", "Encode OwnAlgo"],command=clickSegmentedButtonEncode)
+segementedButtonEncoder = customtkinter.CTkSegmentedButton(master=frame,values=["AES Encode", "Encode OwnAlgo"],command=clickSegmentedButtonEncode)
 segementedButtonEncoder.pack(padx=20, pady=10)
 segementedButtonEncoder.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
 #segmented button for decoding
 def clickSegmentedButtonDecode(value):
-    if (value == "RSA Decode"):
-        print("First button clicked")
-        encodedText = readWrite.readEncodedText("hashedPassword",filePath)
-        decodedText = endec.rsaAlgoDecoder(encodedText, "hashedPassword")
-        originalFile = binary.decodeFromBinary(decodedText)
-        print(originalFile)
+    # if (value == "AES Decode"):
+    #     print("First button clicked")
+    #     encodedText = readWrite.readEncodedText("hashedPassword",filePath)
+    #     decodedText = endec.AESAlgoDecoder(encodedText, "hashedPassword")
+    #     originalFile = binary.decodeFromBinary(decodedText)
+    #     print(originalFile)
 
     if (value == "Decode OwnAlgo"):
         print("Now starting...")
         readWrite.decodeWithOwnAlgo(filePath,hashedPassword)
         print("Done!")
 
+
+    elif(value == "AES Decode"):
+        print("Now starting...")
+        aes.decrypt(filePath,aes.load_key())
+        print("Done!")
+
     segementedButtonDecoder.set("null")
 
 
-segementedButtonDecoder = customtkinter.CTkSegmentedButton(master=frame,values=["RSA Decode", "Decode OwnAlgo"],command=clickSegmentedButtonDecode)
+segementedButtonDecoder = customtkinter.CTkSegmentedButton(master=frame,values=["AES Decode", "Decode OwnAlgo"],command=clickSegmentedButtonDecode)
 segementedButtonDecoder.pack(padx=20, pady=10)
 segementedButtonDecoder.place(relx=0.5, rely=0.7, anchor=tkinter.CENTER)
 
