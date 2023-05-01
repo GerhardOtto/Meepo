@@ -80,20 +80,21 @@ buttonEmail.place(relx=0.2, rely=0.95, anchor=tkinter.CENTER)
 encodedString = None
 def clickSegmentedButtonEncode(value):
     global encodedString
-    binaryString = binary.encodeToBinary(filePath)
+    # binaryString = binary.encodeToBinary(filePath)
     # if (value == "AES Encode"):
     #     encodedString = endec.AESAlgoEncoder(binaryString,"hashedPassword")#bugHere
     #     print("encoded string to follow: " + encodedString + "X")
     #     readWrite.writeEncodedText(encodedString,"hashedPassword")
 
     if (value == "Encode OwnAlgo"):
-        print("Now starting...")
+        print("Now starting encoding with own algo...")
         readWrite.encodeWithOwnAlgo(filePath,hashedPassword)
         print("Done!")
 
     elif (value == "AES Encode"):
-        print("Now starting...")
-        aes.encrypt(filePath,aes.load_key())
+        print("Now starting encoding with AES...")
+        key = aes.generate_key(normalPassword)
+        aes.encrypt(filePath,key)
         print("Done!")
         
     segementedButtonEncoder.set("null")
@@ -113,14 +114,15 @@ def clickSegmentedButtonDecode(value):
     #     print(originalFile)
 
     if (value == "Decode OwnAlgo"):
-        print("Now starting...")
+        print("Now starting decoding with own algo...")
         readWrite.decodeWithOwnAlgo(filePath,hashedPassword)
         print("Done!")
 
 
     elif(value == "AES Decode"):
-        print("Now starting...")
-        aes.decrypt(filePath,aes.load_key())
+        print("Now starting decoding wit AES...")
+        key = aes.generate_key(normalPassword)
+        aes.decrypt(filePath,(key))
         print("Done!")
 
     segementedButtonDecoder.set("null")
@@ -132,8 +134,10 @@ segementedButtonDecoder.place(relx=0.5, rely=0.7, anchor=tkinter.CENTER)
 
 #password
 hashedPassword = None
+normalPassword = None
 def clickPassword():
     global hashedPassword
+    global normalPassword
     dialog = customtkinter.CTkInputDialog(text="Type in a password:", title="Password")
     dialogWidth = dialog.winfo_reqwidth()
     dialogHeight = dialog.winfo_reqheight()
@@ -144,6 +148,7 @@ def clickPassword():
     y = (root.winfo_screenheight() // 2) - (dialogHeight // 2) - (rootHeight // 2)
     dialog.geometry(f"{dialogWidth}x{dialogHeight}+{x}+{y}")
     password = dialog.get_input()
+    normalPassword = password
     hashedPassword = endec.hashSlingingSlasher(password)
     #print("Password:", dialog.get_input())
 

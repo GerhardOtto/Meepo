@@ -14,7 +14,10 @@ def ownAlgoEncoder(data, hashedPassword):
     hashedPasswordBytes = bytes(hashedPassword, "utf-8")
     encodedData = bytearray(n)
     for i in range(n):
-        encodedData[i] = data[n - i - 1] ^ hashedPasswordBytes[i % len(hashedPasswordBytes)]
+        x = data[n - i - 1]
+        y = hashedPasswordBytes[i % len(hashedPasswordBytes)]
+
+        encodedData[i] =  x ^ y
     
     return encodedData
 
@@ -24,8 +27,11 @@ def ownAlgoDecoder(encodedData, hashedPassword):
     hashedPasswordBytes = bytes(hashedPassword, "utf-8")
     decodedData = bytearray(n)
     for i in range(n):
-        decodedData[i] = encodedData[n - i - 1] ^ hashedPasswordBytes[i % len(hashedPasswordBytes)]
-    
+        x = encodedData[i]
+        y = hashedPasswordBytes[i % len(hashedPasswordBytes)]
+
+        decodedData[n - i - 1] = x ^ y
+
     return decodedData
 
 

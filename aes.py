@@ -25,13 +25,6 @@ def load_key():
 # load the previously generated key
 key = load_key()
 
-def encrypt(filename, key):
-    """
-    Given a filename (str) and key (bytes), it encrypts the file and write it
-    """
-    f = Fernet(key)
-
-
 def generate_salt(size=16):
     """Generate the salt used for key derivation, 
     `size` is the length of the salt to generate"""
