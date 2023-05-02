@@ -78,22 +78,24 @@ buttonEmail.place(relx=0.2, rely=0.95, anchor=tkinter.CENTER)
 
 #segmented button for encoding
 def clickSegmentedButtonEncode(value):
+    global hashedPassword
 
     if (value == "Encode OwnAlgo"):
+        if (hashedPassword == None):
+            hashedPassword = "NULL"
         print("Now starting encoding with own algo...")
         readWrite.encodeWithOwnAlgo(filePath,hashedPassword)
         readWrite.deleteFile(filePath)
         print("Done!")
 
     elif value == "AES Encode":
+        if (normalPassword == None):
+            normalPassword = "NULL"
         print("Now starting encoding with AES...")
-        # Generate a new salt and save it to a file
         salt = aes.generate_salt()
         with open("salt.salt", "wb") as salt_file:
             salt_file.write(salt)
-        # Generate the key using the password and salt
         key = aes.generate_key(normalPassword, load_existing_salt=True)
-         # Encrypt the file
         aes.encrypt(filePath, key)
         print("Done!")
 
@@ -107,14 +109,20 @@ segementedButtonEncoder.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
 #segmented button for decoding
 def clickSegmentedButtonDecode(value):
+    global hashedPassword
+    global normalPassword
 
     if (value == "Decode OwnAlgo"):
+        if (hashedPassword == None):
+            hashedPassword = "NULL"
         print("Now starting decoding with own algo...")
         readWrite.decodeWithOwnAlgo(filePath,hashedPassword)
         print("Done!")
 
 
     elif value == "AES Decode":
+        if (normalPassword == None):
+            normalPassword = "NULL"
         print("Now starting decoding with AES...")
         salt = aes.load_salt()
         key = aes.generate_key(normalPassword, load_existing_salt=True)

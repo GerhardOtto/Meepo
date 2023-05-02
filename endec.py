@@ -33,5 +33,3 @@ def ownAlgoDecoder(encodedData, hashedPassword):
         decodedData[n - i - 1] = x ^ y
 
     return decodedData
-
-

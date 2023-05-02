@@ -27,4 +27,3 @@ def encodeWithOwnAlgo(filepath, hashedPassword):
         file.write(encodedData)
 
     return encodedFilepath
-
