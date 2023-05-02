@@ -1,13 +1,16 @@
 import os
 import endec
-# LoopError
+
+def deleteFile(filepath):
+    os.remove(filepath)
+
 def decodeWithOwnAlgo(filepath, hashedPassword):
     with open(filepath, "rb") as file:
         fileData = file.read()
 
     decodedData = endec.ownAlgoDecoder(fileData, hashedPassword)
     fileDir, fileName = os.path.split(filepath)
-    decodedFileName = fileName[:-len(".encoded")] if fileName.endswith(".encoded") else fileName
+    decodedFileName = fileName[:-len(".encoded")]
     decodedFilepath = os.path.join(fileDir, decodedFileName)
 
     with open(decodedFilepath, "wb") as file:

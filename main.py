@@ -77,25 +77,26 @@ buttonEmail.pack(pady=12, padx = 10)
 buttonEmail.place(relx=0.2, rely=0.95, anchor=tkinter.CENTER)
 
 #segmented button for encoding
-encodedString = None
 def clickSegmentedButtonEncode(value):
-    global encodedString
-    # binaryString = binary.encodeToBinary(filePath)
-    # if (value == "AES Encode"):
-    #     encodedString = endec.AESAlgoEncoder(binaryString,"hashedPassword")#bugHere
-    #     print("encoded string to follow: " + encodedString + "X")
-    #     readWrite.writeEncodedText(encodedString,"hashedPassword")
 
     if (value == "Encode OwnAlgo"):
         print("Now starting encoding with own algo...")
         readWrite.encodeWithOwnAlgo(filePath,hashedPassword)
+        readWrite.deleteFile(filePath)
         print("Done!")
 
-    elif (value == "AES Encode"):
+    elif value == "AES Encode":
         print("Now starting encoding with AES...")
-        key = aes.generate_key(normalPassword)
-        aes.encrypt(filePath,key)
+        # Generate a new salt and save it to a file
+        salt = aes.generate_salt()
+        with open("salt.salt", "wb") as salt_file:
+            salt_file.write(salt)
+        # Generate the key using the password and salt
+        key = aes.generate_key(normalPassword, load_existing_salt=True)
+         # Encrypt the file
+        aes.encrypt(filePath, key)
         print("Done!")
+
         
     segementedButtonEncoder.set("null")
 
@@ -106,12 +107,6 @@ segementedButtonEncoder.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
 #segmented button for decoding
 def clickSegmentedButtonDecode(value):
-    # if (value == "AES Decode"):
-    #     print("First button clicked")
-    #     encodedText = readWrite.readEncodedText("hashedPassword",filePath)
-    #     decodedText = endec.AESAlgoDecoder(encodedText, "hashedPassword")
-    #     originalFile = binary.decodeFromBinary(decodedText)
-    #     print(originalFile)
 
     if (value == "Decode OwnAlgo"):
         print("Now starting decoding with own algo...")
@@ -119,10 +114,11 @@ def clickSegmentedButtonDecode(value):
         print("Done!")
 
 
-    elif(value == "AES Decode"):
-        print("Now starting decoding wit AES...")
-        key = aes.generate_key(normalPassword)
-        aes.decrypt(filePath,(key))
+    elif value == "AES Decode":
+        print("Now starting decoding with AES...")
+        salt = aes.load_salt()
+        key = aes.generate_key(normalPassword, load_existing_salt=True)
+        aes.decrypt(filePath, key)
         print("Done!")
 
     segementedButtonDecoder.set("null")
@@ -150,7 +146,6 @@ def clickPassword():
     password = dialog.get_input()
     normalPassword = password
     hashedPassword = endec.hashSlingingSlasher(password)
-    #print("Password:", dialog.get_input())
 
 
 buttonPassword = customtkinter.CTkButton(root, text="Enter Password", command=clickPassword)

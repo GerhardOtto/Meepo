@@ -4,7 +4,6 @@ from cryptography.hazmat.primitives.kdf.scrypt import Scrypt
 
 import secrets
 import base64
-import getpass
 
 # def write_key():
 #     """
@@ -16,9 +15,6 @@ import getpass
 
 
 def load_key():
-    """
-    Loads the key from the current directory named `key.key`
-    """
     return open("key.key", "rb").read()
 
 
@@ -26,30 +22,20 @@ def load_key():
 key = load_key()
 
 def generate_salt(size=16):
-    """Generate the salt used for key derivation, 
-    `size` is the length of the salt to generate"""
     return secrets.token_bytes(size)
 
 
 def derive_key(salt, password):
-    """Derive the key from the `password` using the passed `salt`"""
     kdf = Scrypt(salt=salt, length=32, n=2**14, r=8, p=1)
     return kdf.derive(password.encode())
 
 
+# load salt from salt.salt file
 def load_salt():
-    # load salt from salt.salt file
     return open("salt.salt", "rb").read()
 
 
 def generate_key(password, salt_size=16, load_existing_salt=False, save_salt=True):
-    """
-    Generates a key from a `password` and the salt.
-    If `load_existing_salt` is True, it'll load the salt from a file
-    in the current directory called "salt.salt".
-    If `save_salt` is True, then it will generate a new salt
-    and save it to "salt.salt"
-    """
     if load_existing_salt:
         # load existing salt
         salt = load_salt()
@@ -65,9 +51,6 @@ def generate_key(password, salt_size=16, load_existing_salt=False, save_salt=Tru
 
 
 def encrypt(filename, key):
-    """
-    Given a filename (str) and key (bytes), it encrypts the file and write it
-    """
     f = Fernet(key)
     with open(filename, "rb") as file:
         # read all file data
@@ -80,9 +63,6 @@ def encrypt(filename, key):
 
 
 def decrypt(filename, key):
-    """
-    Given a filename (str) and key (bytes), it decrypts the file and write it
-    """
     f = Fernet(key)
     with open(filename, "rb") as file:
         # read the encrypted data
