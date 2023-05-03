@@ -54,27 +54,55 @@ def encrypt(publicKey, plainText):
 def decrypt(publicKey, cipherText):
     d, n = publicKey
     plainText = "".join([chr(pow(char, d, n)) for char in cipherText])
+
     return plainText
 
 
 def readBinary(filepath):
     with open(filepath, 'rb') as file:
         binaryData = file.read()
+
     return binaryData
 
 def writeBinary(filepath, binaryData):
     with open(filepath, 'wb') as file:
         file.write(binaryData)
 
-def encryptBinary(publicKey, binaryData):
-    e, n = publicKey
-    byteSize = (n.bit_length() + 7) // 8
-    return b"".join([pow(byte, e, n).to_bytes(byteSize, 'big') for byte in binaryData])
 
-def decryptBinary(publicKey, encryptedData):
-    d, n = publicKey
-    byteSize = (n.bit_length() + 7) // 8
-    return bytes([pow(int.from_bytes(encryptedData[i:i+byteSize], 'big'), d, n) for i in range(0, len(encryptedData), byteSize)])
+def encryptBinary(publicKey, binaryData):
+    exponent, modulus = publicKey
+    byteSize = (modulus.bit_length() + 7) // 8
+
+    encryptedData = [
+        pow(byte, exponent, modulus).to_bytes(byteSize, 'big') for byte in binaryData
+    ]
+
+    return b"".join(encryptedData)
+
+
+def decryptBinary(privateKey, encryptedData):
+    secretExponent, modulus = privateKey
+    byteSize = (modulus.bit_length() + 7) // 8
+
+    decryptedData = [
+        pow(int.from_bytes(encryptedData[i:i + byteSize], 'big'), secretExponent, modulus)
+        for i in range(0, len(encryptedData), byteSize)
+    ]
+
+    return bytes(decryptedData)
+
+
+# def encryptBinary(publicKey, binaryData):
+#     e, n = publicKey
+#     byteSize = (n.bit_length() + 7) // 8
+
+#     return b"".join([pow(byte, e, n).to_bytes(byteSize, 'big') for byte in binaryData])
+
+# def decryptBinary(publicKey, encryptedData):
+#     d, n = publicKey
+#     byteSize = (n.bit_length() + 7) // 8
+
+#     return bytes([pow(int.from_bytes(encryptedData[i:i+byteSize], 'big'), d, n) for i in range(0, len(encryptedData), byteSize)])
 
 
 # def generatePrimeFromSeed(seed, start=2):
