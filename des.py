@@ -301,6 +301,38 @@ for i in range(0, 16):
     rkb.append(round_key)
     rk.append(bin2hex(round_key))
  
+
+def encrypt_file(input_file_path, output_file_path, key):
+    # Key generation
+    key = hex2bin(key)
+    key = permute(key, keyp, 56)
+    left_key, right_key = key[:28], key[28:56]
+    rkb = round_key(left_key, right_key)
+    
+    with open(input_file_path, 'rb') as input_file:
+        binary_data = input_file.read()
+        hex_data = binary_data.hex().upper()
+    
+    encrypted_hex_data = ""
+    
+    # Encrypting 16-byte (128-bit) blocks
+    for i in range(0, len(hex_data), 16):
+        block = hex_data[i:i+16]
+        encrypted_block = encrypt(block, rkb, rk)
+        encrypted_hex_data += encrypted_block
+    
+    encrypted_binary_data = bytes.fromhex(encrypted_hex_data)
+    
+    with open(output_file_path, 'wb') as output_file:
+        output_file.write(encrypted_binary_data)
+
+
+input_file_path = "path/to/input/file"
+output_file_path = "path/to/output/file"
+key = "YOURKEYHERE"
+
+encrypt_file(input_file_path, output_file_path, key)
+
 print("Encryption")
 cipher_text = bin2hex(encrypt(pt, rkb, rk))
 print("Cipher Text : ", cipher_text)
