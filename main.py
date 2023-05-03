@@ -79,25 +79,28 @@ buttonEmail.place(relx=0.2, rely=0.95, anchor=tkinter.CENTER)
 #segmented button for encoding
 def clickSegmentedButtonEncode(value):
     global hashedPassword
+    global normalPassword
 
     if (value == "Encode OwnAlgo"):
         if (hashedPassword == None):
             hashedPassword = "NULL"
-        print("Now starting encoding with own algo...")
-        readWrite.encodeWithOwnAlgo(filePath,hashedPassword)
-        readWrite.deleteFile(filePath)
-        print("Done!")
+        else:
+            print("Now starting encoding with own algo...")
+            readWrite.encodeWithOwnAlgo(filePath,hashedPassword)
+            readWrite.deleteFile(filePath)
+            print("Done!")
 
     elif value == "AES Encode":
         if (normalPassword == None):
             normalPassword = "NULL"
-        print("Now starting encoding with AES...")
-        salt = aes.generate_salt()
-        with open("salt.salt", "wb") as salt_file:
-            salt_file.write(salt)
-        key = aes.generate_key(normalPassword, load_existing_salt=True)
-        aes.encrypt(filePath, key)
-        print("Done!")
+        else:
+            print("Now starting encoding with AES...")
+            salt = aes.generateSalt()
+            with open("salt.salt", "wb") as salt_file:
+                salt_file.write(salt)
+            key = aes.generateKey(normalPassword, oldSalt=True)
+            aes.encrypt(filePath, key)
+            print("Done!")
 
         
     segementedButtonEncoder.set("null")
@@ -115,19 +118,21 @@ def clickSegmentedButtonDecode(value):
     if (value == "Decode OwnAlgo"):
         if (hashedPassword == None):
             hashedPassword = "NULL"
-        print("Now starting decoding with own algo...")
-        readWrite.decodeWithOwnAlgo(filePath,hashedPassword)
-        print("Done!")
+        else:   
+            print("Now starting decoding with own algo...")
+            readWrite.decodeWithOwnAlgo(filePath,hashedPassword)
+            print("Done!")
 
 
     elif value == "AES Decode":
         if (normalPassword == None):
             normalPassword = "NULL"
-        print("Now starting decoding with AES...")
-        salt = aes.load_salt()
-        key = aes.generate_key(normalPassword, load_existing_salt=True)
-        aes.decrypt(filePath, key)
-        print("Done!")
+        else:
+            print("Now starting decoding with AES...")
+            aes.loadSalt()
+            key = aes.generateKey(normalPassword, oldSalt=True)
+            aes.decrypt(filePath, key)
+            print("Done!")
 
     segementedButtonDecoder.set("null")
 
