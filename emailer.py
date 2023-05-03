@@ -2,6 +2,7 @@ from email.message import EmailMessage
 import ssl
 import smtplib
 
+# This function sends an email with the encoded file as an attachment
 def sendMail(theReceiver, filePath):
     emailSender = "automatieseepos@gmail.com"
     emailPassword = "sultyrrisvpqtony"

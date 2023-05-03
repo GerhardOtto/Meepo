@@ -1,5 +1,6 @@
 import hashlib
 
+# Hashes password using SHA256
 def hashSlingingSlasher(password):
     passwordBytes = password.encode('utf-8')
     hashObject = hashlib.sha256()
@@ -9,6 +10,7 @@ def hashSlingingSlasher(password):
     return hashedPassword
 
 
+# Encrypts binary data with own xor algorithm.
 def ownAlgoEncoder(fileData, hashedPassword):
     n = len(fileData)
     hashedPasswordBytes = bytes(hashedPassword, "utf-8")
@@ -22,6 +24,7 @@ def ownAlgoEncoder(fileData, hashedPassword):
     return encodedData
 
 
+# Decrypts binary data with own xor algorithm.
 def ownAlgoDecoder(encodedData, hashedPassword):
     n = len(encodedData)
     hashedPasswordBytes = bytes(hashedPassword, "utf-8")

@@ -1,9 +1,11 @@
 import os
 import endec
 
+# Delete a file
 def deleteFile(filepath):
     os.remove(filepath)
 
+# Write decoded data to file.
 def decodeWithOwnAlgo(filepath, hashedPassword):
     with open(filepath, "rb") as file:
         fileData = file.read()
@@ -17,6 +19,7 @@ def decodeWithOwnAlgo(filepath, hashedPassword):
         file.write(decodedData)
 
 
+# Write encoded data to file.
 def encodeWithOwnAlgo(filepath, hashedPassword):
     with open(filepath, "rb") as file:
         fileData = file.read()

@@ -10,7 +10,7 @@ import base64
 #     with open("key.key", "wb") as keyFile:
 #         keyFile.write(key)
 
-
+# Load the key from the current directory named `key.key`
 def loadKey():
     return open("key.key", "rb").read()
 
@@ -18,10 +18,11 @@ def loadKey():
 # load the previously generated key
 key = loadKey()
 
+# initialize the Fernet class
 def generateSalt(size=16):
     return secrets.token_bytes(size)
 
-
+# Derive a key from the password and salt
 def deriveKey(salt, password):
     key = Scrypt(salt=salt, length=32, n=2**14, r=8, p=1)
     return key.derive(password.encode())
@@ -32,6 +33,7 @@ def loadSalt():
     return open("salt.salt", "rb").read()
 
 
+# generate a key from the password and save it to a file
 def generateKey(password, saltSize=16, oldSalt=False, saveSalt=True):
     if oldSalt:
         # load existing salt
@@ -47,6 +49,7 @@ def generateKey(password, saltSize=16, oldSalt=False, saveSalt=True):
     return base64.urlsafe_b64encode(derivedKey)
 
 
+# encrypt the file
 def encrypt(filename, key):
     fernetKey = Fernet(key)
     with open(filename, "rb") as file:
@@ -59,6 +62,7 @@ def encrypt(filename, key):
         file.write(encryptedData)
 
 
+# decrypt the file
 def decrypt(filename, key):
     ernetKey = Fernet(key)
     with open(filename, "rb") as file:

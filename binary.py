@@ -1,3 +1,5 @@
+# Encoding and decoding binary files
+
 def encodeToBinary(filePath):
     with open(filePath, 'rb') as file:
         fileContents = file.read()

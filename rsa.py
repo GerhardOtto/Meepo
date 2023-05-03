@@ -44,6 +44,7 @@ def generateKeypair(p, q):
     return ((e, n), (d, n))
 
 
+# encrypt plaintext
 def encrypt(publicKey, plainText):
     e, n = publicKey
     cipherText = [pow(ord(char), e, n) for char in plainText]
@@ -51,6 +52,7 @@ def encrypt(publicKey, plainText):
     return cipherText
 
 
+# decrypt ciphertext
 def decrypt(publicKey, cipherText):
     d, n = publicKey
     plainText = "".join([chr(pow(char, d, n)) for char in cipherText])
@@ -58,23 +60,27 @@ def decrypt(publicKey, cipherText):
     return plainText
 
 
+# Read binary data from file.
 def readBinary(filepath):
     with open(filepath, 'rb') as file:
         binaryData = file.read()
 
     return binaryData
 
+# Write binary data to file.
 def writeBinary(filepath, binaryData):
     with open(filepath, 'wb') as file:
         file.write(binaryData)
 
 
+# Encrypts binary data with public key.
 def encryptBinary(publicKey, binaryData):
     e, n = publicKey
     byteSize = (n.bit_length() + 7) // 8
 
     return b"".join([pow(byte, e, n).to_bytes(byteSize, 'big') for byte in binaryData])
 
+# Decrypts binary data with public key.
 def decryptBinary(publicKey, encryptedData):
     d, n = publicKey
     byteSize = (n.bit_length() + 7) // 8
@@ -82,12 +88,14 @@ def decryptBinary(publicKey, encryptedData):
     return bytes([pow(int.from_bytes(encryptedData[i:i+byteSize], 'big'), d, n) for i in range(0, len(encryptedData), byteSize)])
 
 
+# Generate prime from seed
 def generatePrimeFromSeed(seed, start=2):
     num = seed + start
     while not is_prime(num):
         num += 1
     return num
 
+# Generate public prime from password
 def generatePublicPrimesFromPassword(hashedPassword):
     hashValue = int(hashedPassword, 16)
     public = generatePrimeFromSeed(hashValue)
@@ -95,6 +103,7 @@ def generatePublicPrimesFromPassword(hashedPassword):
     return public
 
 
+# Generate private prime from password and public prime
 def generatePrivatePrimesFromPassword(hashedPassword,public):
     hashValue = int(hashedPassword, 16)
     private = generatePrimeFromSeed(hashValue, start=public+1)
@@ -102,11 +111,13 @@ def generatePrivatePrimesFromPassword(hashedPassword,public):
     return private
 
 
+# Write RSA encrypted data to file
 def writeRSAEncrypted(filepath, public):
     binaryData = readBinary(filepath)
     encryptedData = encryptBinary(public, binaryData)
     writeBinary(filepath, bytearray(encryptedData))
 
+# Write RSA decrypted data to file
 def writeRSADecrypted(filepath, private):
     encryptedDataFromFile = readBinary(filepath)
     decryptedData = decryptBinary(private, encryptedDataFromFile)
