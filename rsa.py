@@ -70,84 +70,61 @@ def writeBinary(filepath, binaryData):
 
 
 def encryptBinary(publicKey, binaryData):
-    exponent, modulus = publicKey
-    byteSize = (modulus.bit_length() + 7) // 8
+    e, n = publicKey
+    byteSize = (n.bit_length() + 7) // 8
 
-    encryptedData = [
-        pow(byte, exponent, modulus).to_bytes(byteSize, 'big') for byte in binaryData
-    ]
+    return b"".join([pow(byte, e, n).to_bytes(byteSize, 'big') for byte in binaryData])
 
-    return b"".join(encryptedData)
+def decryptBinary(publicKey, encryptedData):
+    d, n = publicKey
+    byteSize = (n.bit_length() + 7) // 8
 
-
-def decryptBinary(privateKey, encryptedData):
-    secretExponent, modulus = privateKey
-    byteSize = (modulus.bit_length() + 7) // 8
-
-    decryptedData = [
-        pow(int.from_bytes(encryptedData[i:i + byteSize], 'big'), secretExponent, modulus)
-        for i in range(0, len(encryptedData), byteSize)
-    ]
-
-    return bytes(decryptedData)
+    return bytes([pow(int.from_bytes(encryptedData[i:i+byteSize], 'big'), d, n) for i in range(0, len(encryptedData), byteSize)])
 
 
-# def encryptBinary(publicKey, binaryData):
-#     e, n = publicKey
-#     byteSize = (n.bit_length() + 7) // 8
+def generatePrimeFromSeed(seed, start=2):
+    num = seed + start
+    while not is_prime(num):
+        num += 1
+    return num
 
-#     return b"".join([pow(byte, e, n).to_bytes(byteSize, 'big') for byte in binaryData])
-
-# def decryptBinary(publicKey, encryptedData):
-#     d, n = publicKey
-#     byteSize = (n.bit_length() + 7) // 8
-
-#     return bytes([pow(int.from_bytes(encryptedData[i:i+byteSize], 'big'), d, n) for i in range(0, len(encryptedData), byteSize)])
-
-
-# def generatePrimeFromSeed(seed, start=2):
-#     num = seed + start
-#     while not is_prime(num):
-#         num += 1
-#     return num
-
-# def generatePublicPrimesFromPassword(hashedPassword):
-#     hash_value = int(hashedPassword, 16)
-#     public = generatePrimeFromSeed(hash_value)
-#     print("Generated public prime: " + str(public))
-#     return public
+def generatePublicPrimesFromPassword(hashedPassword):
+    hashValue = int(hashedPassword, 16)
+    public = generatePrimeFromSeed(hashValue)
+    print("Generated public prime: " + str(public))
+    return public
 
 
-# def generatePrivatePrimesFromPassword(hashedPassword,public):
-#     hash_value = int(hashedPassword, 16)
-#     private = generatePrimeFromSeed(hash_value, start=public+1)
-#     print("Generated private prime: " + str(private))
-#     return private
+def generatePrivatePrimesFromPassword(hashedPassword,public):
+    hashValue = int(hashedPassword, 16)
+    private = generatePrimeFromSeed(hashValue, start=public+1)
+    print("Generated private prime: " + str(private))
+    return private
 
 
-# def writeRSAEncrypted(filepath, public):
-#     binaryData = readBinary(filepath)
-#     encryptedData = encryptBinary(public, binaryData)
-#     writeBinary(filepath, bytearray(encryptedData))
-
-# def writeRSADecrypted(filepath, private):
-#     encryptedDataFromFile = readBinary(filepath)
-#     decryptedData = decryptBinary(private, encryptedDataFromFile)
-#     writeBinary(filepath, decryptedData)
-
-
-# Sample usage
-p = 61
-q = 53
-
-public, private = generateKeypair(p, q)
-
-def writeRSAEncrypted(filepath):
+def writeRSAEncrypted(filepath, public):
     binaryData = readBinary(filepath)
     encryptedData = encryptBinary(public, binaryData)
-    writeBinary(filepath, encryptedData)
+    writeBinary(filepath, bytearray(encryptedData))
 
-def writeRSADecrypted(filepath):
+def writeRSADecrypted(filepath, private):
     encryptedDataFromFile = readBinary(filepath)
     decryptedData = decryptBinary(private, encryptedDataFromFile)
     writeBinary(filepath, decryptedData)
+
+
+# Sample usage
+# p = 61
+# q = 53
+
+# public, private = generateKeypair(p, q)
+
+# def writeRSAEncrypted(filepath):
+#     binaryData = readBinary(filepath)
+#     encryptedData = encryptBinary(public, binaryData)
+#     writeBinary(filepath, encryptedData)
+
+# def writeRSADecrypted(filepath):
+#     encryptedDataFromFile = readBinary(filepath)
+#     decryptedData = decryptBinary(private, encryptedDataFromFile)
+#     writeBinary(filepath, decryptedData)
