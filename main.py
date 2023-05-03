@@ -3,7 +3,7 @@ import tkinter
 import endec
 import emailer
 import fileExplorer
-import binary
+# import binary
 import readWrite
 import aes
 import rsa
@@ -68,9 +68,10 @@ def email():
     y = (root.winfo_screenheight() // 2) - (dialogHeight // 2) - (rootHeight // 2)
     dialog.geometry(f"{dialogWidth}x{dialogHeight}+{x}+{y}")
     emailAddress = dialog.get_input()
-    binary.encodeToBinary(filePath)
+    emailer.encodeToBinary(filePath)
     if emailAddress != None:
         emailer.sendMail(emailAddress,filePath)
+        popup("Mail Sent!")
 
 
 buttonEmail = customtkinter.CTkButton(master=frame, text="Email", command=email,width=120,height=32,border_width=1,corner_radius=8)
