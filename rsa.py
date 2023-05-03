@@ -70,32 +70,49 @@ def decrypt_binary(pk, encrypted_data):
     return bytes([pow(int.from_bytes(encrypted_data[i:i+byte_size], 'big'), d, n) for i in range(0, len(encrypted_data), byte_size)])
 
 
-def generate_prime_from_seed(seed, start=2):
-    num = seed + start
-    while not is_prime(num):
-        num += 1
-    return num
+# def generate_prime_from_seed(seed, start=2):
+#     num = seed + start
+#     while not is_prime(num):
+#         num += 1
+#     return num
 
-def generate_public_primes_from_password(hashedPassword):
-    hash_value = int(hashedPassword, 16)
-    public = generate_prime_from_seed(hash_value)
-    print("Generated public prime: " + str(public))
-    return public
-
-
-def generate_private_primes_from_password(hashedPassword,public):
-    hash_value = int(hashedPassword, 16)
-    private = generate_prime_from_seed(hash_value, start=public+1)
-    print("Generated private prime: " + str(private))
-    return private
+# def generate_public_primes_from_password(hashedPassword):
+#     hash_value = int(hashedPassword, 16)
+#     public = generate_prime_from_seed(hash_value)
+#     print("Generated public prime: " + str(public))
+#     return public
 
 
-def writeRSAEncrypted(file_path, public):
+# def generate_private_primes_from_password(hashedPassword,public):
+#     hash_value = int(hashedPassword, 16)
+#     private = generate_prime_from_seed(hash_value, start=public+1)
+#     print("Generated private prime: " + str(private))
+#     return private
+
+
+# def writeRSAEncrypted(file_path, public):
+#     binary_data = read_binary(file_path)
+#     encrypted_data = encrypt_binary(public, binary_data)
+#     write_binary(file_path, bytearray(encrypted_data))
+
+# def writeRSADecrypted(file_path, private):
+#     encrypted_data_from_file = read_binary(file_path)
+#     decrypted_data = decrypt_binary(private, encrypted_data_from_file)
+#     write_binary(file_path, decrypted_data)
+
+
+# Sample usage
+p = 61
+q = 53
+
+public, private = generate_keypair(p, q)
+
+def writeRSAEncrypted(file_path):
     binary_data = read_binary(file_path)
     encrypted_data = encrypt_binary(public, binary_data)
-    write_binary(file_path, bytearray(encrypted_data))
+    write_binary(file_path, encrypted_data)
 
-def writeRSADecrypted(file_path, private):
+def writeRSADecrypted(file_path):
     encrypted_data_from_file = read_binary(file_path)
     decrypted_data = decrypt_binary(private, encrypted_data_from_file)
     write_binary(file_path, decrypted_data)
