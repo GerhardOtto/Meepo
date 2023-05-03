@@ -77,6 +77,50 @@ buttonEmail = customtkinter.CTkButton(master=frame, text="Email", command=email,
 buttonEmail.pack(pady=12, padx = 10)
 buttonEmail.place(relx=0.2, rely=0.95, anchor=tkinter.CENTER)
 
+#popup button
+def popup(value):
+    popup = tkinter.Toplevel()
+    popup.title("Button Clicked")
+
+    # Remove minimize and close buttons from the popup window
+    popup.overrideredirect(True)
+
+    message = "Button clicked: " + value
+    tkinter.Label(popup, text=message, bg="#303030", fg="white").pack()
+
+    # Add an "Okay" button to the popup window
+    button_okay = tkinter.Button(popup, text="Okay", command=popup.destroy, bg="#505050", fg="white")
+    button_okay.pack(pady=10)
+
+    # Set the background color of the popup window
+    popup.configure(bg="#303030")
+
+    # Get the dimensions and position of the root window
+    root_width = root.winfo_width()
+    root_height = root.winfo_height()
+    root_x = root.winfo_x()
+    root_y = root.winfo_y()
+
+    # Calculate the center position of the root window
+    center_x = root_x + int(root_width / 2)
+    center_y = root_y + int(root_height / 2)
+
+    # Get the dimensions of the popup window
+    popup_width = popup.winfo_width()
+    popup_height = popup.winfo_height()
+
+    # Calculate the position of the popup window relative to the center position of the root window
+    popup_x = center_x - int(popup_width / 2) - 75
+    popup_y = center_y - int(popup_height / 2)
+
+    # Position the popup window
+    popup.geometry(f"+{popup_x}+{popup_y}")
+
+    popup.focus_set()
+    popup.grab_set()
+    popup.wait_window()
+
+
 #segmented button for encoding
 def clickSegmentedButtonEncode(value):
     global hashedPassword
@@ -113,7 +157,8 @@ def clickSegmentedButtonEncode(value):
         rsa.writeRSAEncrypted(filePath)
         print("Done!")
 
-        
+
+    popup(value) 
     segementedButtonEncoder.set("null")
 
 
@@ -132,6 +177,7 @@ def clickSegmentedButtonDecode(value):
 
         print("Now starting decoding with own algo...")
         readWrite.decodeWithOwnAlgo(filePath,hashedPassword)
+        readWrite.deleteFile(filePath)
         print("Done!")
 
 
@@ -155,6 +201,7 @@ def clickSegmentedButtonDecode(value):
         print("Done!")
 
 
+    popup(value)
     segementedButtonDecoder.set("null")
 
 

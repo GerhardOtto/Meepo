@@ -1,9 +1,11 @@
+# create greatest common divisor
 def gcd(a, b):
     while b:
         a, b = b, a % b
     return a
 
 
+# create modular inverse
 def mod_inverse(a, m):
     for x in range(1, m):
         if (a * x) % m == 1:
@@ -11,6 +13,7 @@ def mod_inverse(a, m):
     return None
 
 
+# determine if number is prime
 def is_prime(num):
     if num < 2:
         return False
@@ -20,7 +23,8 @@ def is_prime(num):
     return True
 
 
-def generate_keypair(p, q):
+# generate public and private keys
+def generateKeypair(p, q):
     if not (is_prime(p) and is_prime(q)):
         raise ValueError("Both numbers must be prime.")
     if p == q:
@@ -40,79 +44,82 @@ def generate_keypair(p, q):
     return ((e, n), (d, n))
 
 
-def encrypt(pk, plaintext):
-    e, n = pk
-    return [pow(ord(char), e, n) for char in plaintext]
+def encrypt(publicKey, plainText):
+    e, n = publicKey
+    cipherText = [pow(ord(char), e, n) for char in plainText]
+
+    return cipherText
 
 
-def decrypt(pk, ciphertext):
-    d, n = pk
-    return "".join([chr(pow(char, d, n)) for char in ciphertext])
+def decrypt(publicKey, cipherText):
+    d, n = publicKey
+    plainText = "".join([chr(pow(char, d, n)) for char in cipherText])
+    return plainText
 
 
-def read_binary(file_path):
-    with open(file_path, 'rb') as file:
-        binary_data = file.read()
-    return binary_data
+def readBinary(filepath):
+    with open(filepath, 'rb') as file:
+        binaryData = file.read()
+    return binaryData
 
-def write_binary(file_path, binary_data):
-    with open(file_path, 'wb') as file:
-        file.write(binary_data)
+def writeBinary(filepath, binaryData):
+    with open(filepath, 'wb') as file:
+        file.write(binaryData)
 
-def encrypt_binary(pk, binary_data):
-    e, n = pk
-    byte_size = (n.bit_length() + 7) // 8
-    return b"".join([pow(byte, e, n).to_bytes(byte_size, 'big') for byte in binary_data])
+def encryptBinary(publicKey, binaryData):
+    e, n = publicKey
+    byteSize = (n.bit_length() + 7) // 8
+    return b"".join([pow(byte, e, n).to_bytes(byteSize, 'big') for byte in binaryData])
 
-def decrypt_binary(pk, encrypted_data):
-    d, n = pk
-    byte_size = (n.bit_length() + 7) // 8
-    return bytes([pow(int.from_bytes(encrypted_data[i:i+byte_size], 'big'), d, n) for i in range(0, len(encrypted_data), byte_size)])
+def decryptBinary(publicKey, encryptedData):
+    d, n = publicKey
+    byteSize = (n.bit_length() + 7) // 8
+    return bytes([pow(int.from_bytes(encryptedData[i:i+byteSize], 'big'), d, n) for i in range(0, len(encryptedData), byteSize)])
 
 
-# def generate_prime_from_seed(seed, start=2):
+# def generatePrimeFromSeed(seed, start=2):
 #     num = seed + start
 #     while not is_prime(num):
 #         num += 1
 #     return num
 
-# def generate_public_primes_from_password(hashedPassword):
+# def generatePublicPrimesFromPassword(hashedPassword):
 #     hash_value = int(hashedPassword, 16)
-#     public = generate_prime_from_seed(hash_value)
+#     public = generatePrimeFromSeed(hash_value)
 #     print("Generated public prime: " + str(public))
 #     return public
 
 
-# def generate_private_primes_from_password(hashedPassword,public):
+# def generatePrivatePrimesFromPassword(hashedPassword,public):
 #     hash_value = int(hashedPassword, 16)
-#     private = generate_prime_from_seed(hash_value, start=public+1)
+#     private = generatePrimeFromSeed(hash_value, start=public+1)
 #     print("Generated private prime: " + str(private))
 #     return private
 
 
-# def writeRSAEncrypted(file_path, public):
-#     binary_data = read_binary(file_path)
-#     encrypted_data = encrypt_binary(public, binary_data)
-#     write_binary(file_path, bytearray(encrypted_data))
+# def writeRSAEncrypted(filepath, public):
+#     binaryData = readBinary(filepath)
+#     encryptedData = encryptBinary(public, binaryData)
+#     writeBinary(filepath, bytearray(encryptedData))
 
-# def writeRSADecrypted(file_path, private):
-#     encrypted_data_from_file = read_binary(file_path)
-#     decrypted_data = decrypt_binary(private, encrypted_data_from_file)
-#     write_binary(file_path, decrypted_data)
+# def writeRSADecrypted(filepath, private):
+#     encryptedDataFromFile = readBinary(filepath)
+#     decryptedData = decryptBinary(private, encryptedDataFromFile)
+#     writeBinary(filepath, decryptedData)
 
 
 # Sample usage
 p = 61
 q = 53
 
-public, private = generate_keypair(p, q)
+public, private = generateKeypair(p, q)
 
-def writeRSAEncrypted(file_path):
-    binary_data = read_binary(file_path)
-    encrypted_data = encrypt_binary(public, binary_data)
-    write_binary(file_path, encrypted_data)
+def writeRSAEncrypted(filepath):
+    binaryData = readBinary(filepath)
+    encryptedData = encryptBinary(public, binaryData)
+    writeBinary(filepath, encryptedData)
 
-def writeRSADecrypted(file_path):
-    encrypted_data_from_file = read_binary(file_path)
-    decrypted_data = decrypt_binary(private, encrypted_data_from_file)
-    write_binary(file_path, decrypted_data)
+def writeRSADecrypted(filepath):
+    encryptedDataFromFile = readBinary(filepath)
+    decryptedData = decryptBinary(private, encryptedDataFromFile)
+    writeBinary(filepath, decryptedData)
