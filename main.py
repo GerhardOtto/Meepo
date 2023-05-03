@@ -6,6 +6,7 @@ import fileExplorer
 import binary
 import readWrite
 import aes
+import rsa
 
 customtkinter.set_appearance_mode("system")
 customtkinter.set_default_color_theme("blue")
@@ -84,29 +85,40 @@ def clickSegmentedButtonEncode(value):
     if (value == "Encode OwnAlgo"):
         if (hashedPassword == None):
             hashedPassword = "NULL"
-        else:
-            print("Now starting encoding with own algo...")
-            readWrite.encodeWithOwnAlgo(filePath,hashedPassword)
-            readWrite.deleteFile(filePath)
-            print("Done!")
+    
+        print("Now starting encoding with own algo...")
+        readWrite.encodeWithOwnAlgo(filePath,hashedPassword)
+        readWrite.deleteFile(filePath)
+        print("Done!")
+
 
     elif value == "AES Encode":
         if (normalPassword == None):
             normalPassword = "NULL"
-        else:
-            print("Now starting encoding with AES...")
-            salt = aes.generateSalt()
-            with open("salt.salt", "wb") as salt_file:
-                salt_file.write(salt)
-            key = aes.generateKey(normalPassword, oldSalt=True)
-            aes.encrypt(filePath, key)
-            print("Done!")
+        
+        print("Now starting encoding with AES...")
+        salt = aes.generateSalt()
+        with open("salt.salt", "wb") as salt_file:
+            salt_file.write(salt)
+        key = aes.generateKey(normalPassword, oldSalt=True)
+        aes.encrypt(filePath, key)
+        print("Done!")
+
+    
+    elif value == "RSA Encode":
+        if (hashedPassword == None):
+            hashedPassword = endec.hashSlingingSlasher("NULL")
+
+        print("Now starting encoding with RSA...")
+        public = rsa.generate_public_primes_from_password(hashedPassword)
+        rsa.writeRSAEncrypted(filePath, public)
+        print("Done!")
 
         
     segementedButtonEncoder.set("null")
 
 
-segementedButtonEncoder = customtkinter.CTkSegmentedButton(master=frame,values=["AES Encode", "Encode OwnAlgo"],command=clickSegmentedButtonEncode)
+segementedButtonEncoder = customtkinter.CTkSegmentedButton(master=frame,values=["AES Encode", "Encode OwnAlgo", "RSA Encode"],command=clickSegmentedButtonEncode)
 segementedButtonEncoder.pack(padx=20, pady=10)
 segementedButtonEncoder.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
@@ -118,26 +130,38 @@ def clickSegmentedButtonDecode(value):
     if (value == "Decode OwnAlgo"):
         if (hashedPassword == None):
             hashedPassword = "NULL"
-        else:   
-            print("Now starting decoding with own algo...")
-            readWrite.decodeWithOwnAlgo(filePath,hashedPassword)
-            print("Done!")
+
+        print("Now starting decoding with own algo...")
+        readWrite.decodeWithOwnAlgo(filePath,hashedPassword)
+        print("Done!")
 
 
     elif value == "AES Decode":
         if (normalPassword == None):
             normalPassword = "NULL"
-        else:
-            print("Now starting decoding with AES...")
-            aes.loadSalt()
-            key = aes.generateKey(normalPassword, oldSalt=True)
-            aes.decrypt(filePath, key)
-            print("Done!")
+
+        print("Now starting decoding with AES...")
+        aes.loadSalt()
+        key = aes.generateKey(normalPassword, oldSalt=True)
+        aes.decrypt(filePath, key)
+        print("Done!")
+
+
+    elif value == "RSA Decode":
+        if (hashedPassword == None):
+            hashedPassword = endec.hashSlingingSlasher("NULL")
+
+        print("Now starting decoding with RSA...")
+        public = rsa.generate_public_primes_from_password(hashedPassword)
+        private = rsa.generate_private_primes_from_password(hashedPassword, public)
+        rsa.writeRSADecrypted(filePath, private)
+        print("Done!")
+
 
     segementedButtonDecoder.set("null")
 
 
-segementedButtonDecoder = customtkinter.CTkSegmentedButton(master=frame,values=["AES Decode", "Decode OwnAlgo"],command=clickSegmentedButtonDecode)
+segementedButtonDecoder = customtkinter.CTkSegmentedButton(master=frame,values=["AES Decode", "Decode OwnAlgo", "RSA Decode"],command=clickSegmentedButtonDecode)
 segementedButtonDecoder.pack(padx=20, pady=10)
 segementedButtonDecoder.place(relx=0.5, rely=0.7, anchor=tkinter.CENTER)
 
