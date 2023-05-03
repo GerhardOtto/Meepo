@@ -121,7 +121,7 @@ def popup(value):
     popup.wait_window()
 
 
-#segmented button for encoding
+#segmented button for encrypting
 def clickSegmentedButtonEncode(value):
     global hashedPassword
     global normalPassword
@@ -130,7 +130,7 @@ def clickSegmentedButtonEncode(value):
         if (hashedPassword == None):
             hashedPassword = "NULL"
     
-        print("Now starting encoding with own algo...")
+        print("Now starting encrypting with own algo...")
         readWrite.encodeWithOwnAlgo(filePath,hashedPassword)
         readWrite.deleteFile(filePath)
         print("Done!")
@@ -140,7 +140,7 @@ def clickSegmentedButtonEncode(value):
         if (normalPassword == None):
             normalPassword = "NULL"
         
-        print("Now starting encoding with AES...")
+        print("Now starting encrypting with AES...")
         salt = aes.generateSalt()
         with open("salt.salt", "wb") as salt_file:
             salt_file.write(salt)
@@ -153,8 +153,9 @@ def clickSegmentedButtonEncode(value):
         if (hashedPassword == None):
             hashedPassword = endec.hashSlingingSlasher("NULL")
 
-        print("Now starting encoding with RSA...")
-        rsa.writeRSAEncrypted(filePath)
+        print("Now starting encrypting with RSA...")
+        public = rsa.generatePublicPrimesFromPassword(hashedPassword)
+        rsa.writeRSAEncrypted(filePath,public)
         print("Done!")
 
 
@@ -166,7 +167,7 @@ segementedButtonEncoder = customtkinter.CTkSegmentedButton(master=frame,values=[
 segementedButtonEncoder.pack(padx=20, pady=10)
 segementedButtonEncoder.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
-#segmented button for decoding
+#segmented button for decrypting
 def clickSegmentedButtonDecode(value):
     global hashedPassword
     global normalPassword
@@ -175,7 +176,7 @@ def clickSegmentedButtonDecode(value):
         if (hashedPassword == None):
             hashedPassword = "NULL"
 
-        print("Now starting decoding with own algo...")
+        print("Now starting decrypting with own algo...")
         readWrite.decodeWithOwnAlgo(filePath,hashedPassword)
         readWrite.deleteFile(filePath)
         print("Done!")
@@ -185,7 +186,7 @@ def clickSegmentedButtonDecode(value):
         if (normalPassword == None):
             normalPassword = "NULL"
 
-        print("Now starting decoding with AES...")
+        print("Now starting decrypting with AES...")
         aes.loadSalt()
         key = aes.generateKey(normalPassword, oldSalt=True)
         aes.decrypt(filePath, key)
@@ -196,8 +197,10 @@ def clickSegmentedButtonDecode(value):
         if (hashedPassword == None):
             hashedPassword = endec.hashSlingingSlasher("NULL")
 
-        print("Now starting decoding with RSA...")
-        rsa.writeRSADecrypted(filePath)
+        print("Now starting decrypting with RSA...")
+        public = rsa.generatePublicPrimesFromPassword(hashedPassword)
+        private = rsa.generatePrivatePrimesFromPassword(public)
+        rsa.writeRSADecrypted(filePath,private)
         print("Done!")
 
 

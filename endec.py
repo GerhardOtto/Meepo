@@ -9,12 +9,12 @@ def hashSlingingSlasher(password):
     return hashedPassword
 
 
-def ownAlgoEncoder(data, hashedPassword):
-    n = len(data)
+def ownAlgoEncoder(fileData, hashedPassword):
+    n = len(fileData)
     hashedPasswordBytes = bytes(hashedPassword, "utf-8")
     encodedData = bytearray(n)
     for i in range(n):
-        x = data[n - i - 1]
+        x = fileData[n - i - 1]
         y = hashedPasswordBytes[i % len(hashedPasswordBytes)]
 
         encodedData[i] =  x ^ y
