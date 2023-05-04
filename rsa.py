@@ -48,16 +48,6 @@ def generate_private_key(p, q):
     return (d, n)
 
 
-def encrypt(pk, plaintext):
-    e, n = pk
-    return [pow(ord(char), e, n) for char in plaintext]
-
-
-def decrypt(pk, ciphertext):
-    d, n = pk
-    return "".join([chr(pow(char, d, n)) for char in ciphertext])
-
-
 def read_binary(file_path):
     with open(file_path, 'rb') as file:
         binary_data = file.read()
@@ -91,10 +81,6 @@ def decrypt_binary(pk, encrypted_data):
 
     decrypted_binary = bytes(decrypted_data)
     return decrypted_binary
-
-
-p = 11
-q = 17
 
 
 def writeRSAEncrypted(filePath, p = 11, q = 17):
