@@ -36,3 +36,13 @@ def ownAlgoDecoder(encodedData, hashedPassword):
         decodedData[n - i - 1] = x ^ y
 
     return decodedData
+
+
+total = 0
+string = hashSlingingSlasher("NOtPw")
+print(string)
+for char in string:
+    if char.isdigit():
+        total += int(char)
+
+print("The sum of all digits in the string is:", total)
