@@ -20,7 +20,20 @@ def is_prime(num):
     return True
 
 
-def generate_keypair(p, q):
+def generate_public_key(p, q):
+    n = p * q
+    phi = (p - 1) * (q - 1)
+
+    e = 2
+    while e < phi:
+        if gcd(e, phi) == 1:
+            break
+        e += 1
+
+    return (e, n)
+
+
+def generate_private_key(p, q):
     n = p * q
     phi = (p - 1) * (q - 1)
 
@@ -32,7 +45,7 @@ def generate_keypair(p, q):
 
     d = mod_inverse(e, phi)
 
-    return ((e, n), (d, n))
+    return (d, n)
 
 
 def encrypt(pk, plaintext):
@@ -83,29 +96,16 @@ def decrypt_binary(pk, encrypted_data):
 p = 11
 q = 17
 
-public, private = generate_keypair(p, q)
-
 
 def writeRSAEncrypted(filePath, p = 11, q = 17):
     binary = read_binary(filePath)
-    public, private = generate_keypair(p, q)
+    public= generate_public_key(p, q)
     encrypted = encrypt_binary(public, binary)
     write_binary(filePath, encrypted)
 
 
 def writeRSADecrypted(file_path, p = 11, q = 17):
     encrypted_data_from_file = read_binary(file_path)
-    public, private = generate_keypair(p, q)
+    private = generate_private_key(p, q)
     decrypted_data = decrypt_binary(private, encrypted_data_from_file)
     write_binary(file_path, decrypted_data)
-
-
-# def writeRSAEncrypted(file_path):
-#     binary_data = read_binary(file_path)
-#     encrypted_data = encrypt_binary(public, binary_data)
-#     write_binary(file_path, encrypted_data)
-
-# def writeRSADecrypted(file_path):
-#     encrypted_data_from_file = read_binary(file_path)
-#     decrypted_data = decrypt_binary(private, encrypted_data_from_file)
-#     write_binary(file_path, decrypted_data)
