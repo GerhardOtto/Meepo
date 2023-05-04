@@ -164,12 +164,15 @@ def clickSegmentedButtonDecode(value):
         if (hashedPassword == None):
             hashedPassword = endec.hashSlingingSlasher("NULL")
 
-        print("Now starting decrypting with RSA...")
-        left, right = rsa.hashToArraySplit(hashedPassword)
-        prime_left = rsa.findClosestPrime(sum(left))
-        prime_right = rsa.findClosestPrime(sum(right))
-        rsa.writeRSADecrypted(filePath,prime_left,prime_right)
-        print("Done!")
+        try:
+            print("Now starting encrypting with RSA...")
+            left, right = rsa.hashToArraySplit(hashedPassword)
+            prime_left = rsa.findClosestPrime(sum(left))
+            prime_right = rsa.findClosestPrime(sum(right))
+            rsa.writeRSAEncrypted(filePath,prime_left,prime_right)
+            print("Done!")
+        except Exception as e:
+            print("Error occurred: ", e)
 
 
     popup(value)
