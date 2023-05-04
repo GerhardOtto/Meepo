@@ -131,8 +131,7 @@ def clickSegmentedButtonEncode(value):
             hashedPassword = endec.hashSlingingSlasher("NULL")
 
         print("Now starting encrypting with RSA...")
-        public = rsa.generatePublicPrimesFromPassword(hashedPassword)
-        rsa.writeRSAEncrypted(filePath,public)
+        rsa.writeRSAEncrypted(filePath)
         print("Done!")
 
 
@@ -140,7 +139,7 @@ def clickSegmentedButtonEncode(value):
     segementedButtonEncoder.set("null")
 
 
-segementedButtonEncoder = customtkinter.CTkSegmentedButton(master=frame,values=["AES Encode", "Encode OwnAlgo", "RSA Encode", "DES Encode"],command=clickSegmentedButtonEncode)
+segementedButtonEncoder = customtkinter.CTkSegmentedButton(master=frame,values=["Encode OwnAlgo", "RSA Encode"],command=clickSegmentedButtonEncode)
 segementedButtonEncoder.pack(padx=20, pady=10)
 segementedButtonEncoder.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
@@ -163,9 +162,7 @@ def clickSegmentedButtonDecode(value):
             hashedPassword = endec.hashSlingingSlasher("NULL")
 
         print("Now starting decrypting with RSA...")
-        public = rsa.generatePublicPrimesFromPassword(hashedPassword)
-        private = rsa.generatePrivatePrimesFromPassword(public)
-        rsa.writeRSADecrypted(filePath,private)
+        rsa.writeRSADecrypted(filePath)
         print("Done!")
 
 
@@ -173,7 +170,7 @@ def clickSegmentedButtonDecode(value):
     segementedButtonDecoder.set("null")
 
 
-segementedButtonDecoder = customtkinter.CTkSegmentedButton(master=frame,values=["AES Decode", "Decode OwnAlgo", "RSA Decode", "DES Decode"],command=clickSegmentedButtonDecode)
+segementedButtonDecoder = customtkinter.CTkSegmentedButton(master=frame,values=["Decode OwnAlgo", "RSA Decode"],command=clickSegmentedButtonDecode)
 segementedButtonDecoder.pack(padx=20, pady=10)
 segementedButtonDecoder.place(relx=0.5, rely=0.7, anchor=tkinter.CENTER)
 
