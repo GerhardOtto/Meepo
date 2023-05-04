@@ -21,11 +21,6 @@ def is_prime(num):
 
 
 def generate_keypair(p, q):
-    if not (is_prime(p) and is_prime(q)):
-        raise ValueError("Both numbers must be prime.")
-    if p == q:
-        raise ValueError("p and q cannot be equal.")
-
     n = p * q
     phi = (p - 1) * (q - 1)
 
@@ -59,27 +54,58 @@ def write_binary(file_path, binary_data):
     with open(file_path, 'wb') as file:
         file.write(binary_data)
 
-def encrypt_binary(pk, binary_data):
+def encrypt_binary(pk, data):
     e, n = pk
-    byte_size = (n.bit_length() + 7) // 8
-    return b"".join([pow(byte, e, n).to_bytes(byte_size, 'big') for byte in binary_data])
+    size = (n.bit_length() + 7) // 8
+    encrypted_data = []
+
+    for b in data:
+        encrypted_byte = pow(b, e, n).to_bytes(size, 'big')
+        encrypted_data.append(encrypted_byte)
+
+    encrypted_binary = b"".join(encrypted_data)
+    return encrypted_binary
 
 def decrypt_binary(pk, encrypted_data):
     d, n = pk
-    byte_size = (n.bit_length() + 7) // 8
-    return bytes([pow(int.from_bytes(encrypted_data[i:i+byte_size], 'big'), d, n) for i in range(0, len(encrypted_data), byte_size)])
+    size = (n.bit_length() + 7) // 8
+    decrypted_data = []
 
-p = 61
-q = 53
+    for i in range(0, len(encrypted_data), size):
+        chunk = encrypted_data[i:i+size]
+        decrypted_byte = pow(int.from_bytes(chunk, 'big'), d, n)
+        decrypted_data.append(decrypted_byte)
+
+    decrypted_binary = bytes(decrypted_data)
+    return decrypted_binary
+
+
+p = 11
+q = 17
 
 public, private = generate_keypair(p, q)
 
-def writeRSAEncrypted(file_path):
-    binary_data = read_binary(file_path)
-    encrypted_data = encrypt_binary(public, binary_data)
-    write_binary(file_path, encrypted_data)
 
-def writeRSADecrypted(file_path):
+def writeRSAEncrypted(filePath, p = 11, q = 17):
+    binary = read_binary(filePath)
+    public, private = generate_keypair(p, q)
+    encrypted = encrypt_binary(public, binary)
+    write_binary(filePath, encrypted)
+
+
+def writeRSADecrypted(file_path, p = 11, q = 17):
     encrypted_data_from_file = read_binary(file_path)
+    public, private = generate_keypair(p, q)
     decrypted_data = decrypt_binary(private, encrypted_data_from_file)
     write_binary(file_path, decrypted_data)
+
+
+# def writeRSAEncrypted(file_path):
+#     binary_data = read_binary(file_path)
+#     encrypted_data = encrypt_binary(public, binary_data)
+#     write_binary(file_path, encrypted_data)
+
+# def writeRSADecrypted(file_path):
+#     encrypted_data_from_file = read_binary(file_path)
+#     decrypted_data = decrypt_binary(private, encrypted_data_from_file)
+#     write_binary(file_path, decrypted_data)
