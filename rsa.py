@@ -1,3 +1,5 @@
+import random
+
 # create greatest common divisor
 def gcd(a, b):
     while b:
@@ -89,6 +91,14 @@ def decryptBinary(publicKey, encryptedData):
 
 
 # Generate prime from seed
+# def generatePrimeFromSeed(seed, start=0):
+#     random.seed(seed)
+#     i = start
+#     while True:
+#         if is_prime(i):
+#             return i
+#         i += random.randint(1, 1000)
+
 def generatePrimeFromSeed(seed, start=2):
     num = seed + start
     while not is_prime(num):

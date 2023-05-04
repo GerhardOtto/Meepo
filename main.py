@@ -3,10 +3,10 @@ import tkinter
 import endec
 import emailer
 import fileExplorer
-# import binary
 import readWrite
 import aes
 import rsa
+# import des
 
 customtkinter.set_appearance_mode("system")
 customtkinter.set_default_color_theme("blue")
@@ -151,11 +151,21 @@ def clickSegmentedButtonEncode(value):
         print("Done!")
 
 
+    elif value == "DES Encode":
+        if (hashedPassword == None):
+            hashedPassword = endec.hashSlingingSlasher("NULL")
+
+        print("Now starting encrypting with DES...")
+        # des.start_encryption(filePath)
+        print("Done!")
+
+
+
     popup(value) 
     segementedButtonEncoder.set("null")
 
 
-segementedButtonEncoder = customtkinter.CTkSegmentedButton(master=frame,values=["AES Encode", "Encode OwnAlgo", "RSA Encode"],command=clickSegmentedButtonEncode)
+segementedButtonEncoder = customtkinter.CTkSegmentedButton(master=frame,values=["AES Encode", "Encode OwnAlgo", "RSA Encode", "DES Encode"],command=clickSegmentedButtonEncode)
 segementedButtonEncoder.pack(padx=20, pady=10)
 segementedButtonEncoder.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
@@ -196,11 +206,20 @@ def clickSegmentedButtonDecode(value):
         print("Done!")
 
 
+    elif value == "DES Decode":
+        if (hashedPassword == None):
+            hashedPassword = endec.hashSlingingSlasher("NULL")
+
+        print("Now starting decrypting with DES...")
+        # des.start_decryption(filePath)
+        print("Done!")
+
+
     popup(value)
     segementedButtonDecoder.set("null")
 
 
-segementedButtonDecoder = customtkinter.CTkSegmentedButton(master=frame,values=["AES Decode", "Decode OwnAlgo", "RSA Decode"],command=clickSegmentedButtonDecode)
+segementedButtonDecoder = customtkinter.CTkSegmentedButton(master=frame,values=["AES Decode", "Decode OwnAlgo", "RSA Decode", "DES Decode"],command=clickSegmentedButtonDecode)
 segementedButtonDecoder.pack(padx=20, pady=10)
 segementedButtonDecoder.place(relx=0.5, rely=0.7, anchor=tkinter.CENTER)
 
