@@ -4,9 +4,8 @@ import endec
 import emailer
 import fileExplorer
 import readWrite
-import aes
 import rsa
-# import des
+
 
 customtkinter.set_appearance_mode("system")
 customtkinter.set_default_color_theme("blue")
@@ -126,20 +125,6 @@ def clickSegmentedButtonEncode(value):
         readWrite.encodeWithOwnAlgo(filePath,hashedPassword)
         readWrite.deleteFile(filePath)
         print("Done!")
-
-
-    elif value == "AES Encode":
-        if (normalPassword == None):
-            normalPassword = "NULL"
-        
-        print("Now starting encrypting with AES...")
-        salt = aes.generateSalt()
-        with open("salt.salt", "wb") as salt_file:
-            salt_file.write(salt)
-        key = aes.generateKey(normalPassword, oldSalt=True)
-        aes.encrypt(filePath, key)
-        print("Done!")
-
     
     elif value == "RSA Encode":
         if (hashedPassword == None):
@@ -149,16 +134,6 @@ def clickSegmentedButtonEncode(value):
         public = rsa.generatePublicPrimesFromPassword(hashedPassword)
         rsa.writeRSAEncrypted(filePath,public)
         print("Done!")
-
-
-    elif value == "DES Encode":
-        if (hashedPassword == None):
-            hashedPassword = endec.hashSlingingSlasher("NULL")
-
-        print("Now starting encrypting with DES...")
-        # des.start_encryption(filePath)
-        print("Done!")
-
 
 
     popup(value) 
@@ -183,18 +158,6 @@ def clickSegmentedButtonDecode(value):
         readWrite.deleteFile(filePath)
         print("Done!")
 
-
-    elif value == "AES Decode":
-        if (normalPassword == None):
-            normalPassword = "NULL"
-
-        print("Now starting decrypting with AES...")
-        aes.loadSalt()
-        key = aes.generateKey(normalPassword, oldSalt=True)
-        aes.decrypt(filePath, key)
-        print("Done!")
-
-
     elif value == "RSA Decode":
         if (hashedPassword == None):
             hashedPassword = endec.hashSlingingSlasher("NULL")
@@ -203,15 +166,6 @@ def clickSegmentedButtonDecode(value):
         public = rsa.generatePublicPrimesFromPassword(hashedPassword)
         private = rsa.generatePrivatePrimesFromPassword(public)
         rsa.writeRSADecrypted(filePath,private)
-        print("Done!")
-
-
-    elif value == "DES Decode":
-        if (hashedPassword == None):
-            hashedPassword = endec.hashSlingingSlasher("NULL")
-
-        print("Now starting decrypting with DES...")
-        # des.start_decryption(filePath)
         print("Done!")
 
 
