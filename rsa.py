@@ -1,9 +1,11 @@
+# Greateast common divisor
 def gcd(a, b):
     while b:
         a, b = b, a % b
     return a
 
 
+# Get the modular inverse of a number
 def mod_inverse(a, m):
     for x in range(1, m):
         if (a * x) % m == 1:
@@ -11,15 +13,7 @@ def mod_inverse(a, m):
     return None
 
 
-def is_prime(num):
-    if num < 2:
-        return False
-    for i in range(2, int(num**0.5) + 1):
-        if num % i == 0:
-            return False
-    return True
-
-
+# Generate public key
 def generate_public_key(p, q):
     n = p * q
     phi = (p - 1) * (q - 1)
@@ -33,6 +27,7 @@ def generate_public_key(p, q):
     return (e, n)
 
 
+# Generate private key
 def generate_private_key(p, q):
     n = p * q
     phi = (p - 1) * (q - 1)
@@ -48,17 +43,20 @@ def generate_private_key(p, q):
     return (d, n)
 
 
+# Read binary data from file
 def read_binary(file_path):
     with open(file_path, 'rb') as file:
         binary_data = file.read()
     return binary_data
 
 
+# Write binary data to file
 def write_binary(file_path, binary_data):
     with open(file_path, 'wb') as file:
         file.write(binary_data)
 
 
+# Encrypt binary data
 def encrypt_binary(pk, data):
     e, n = pk
     size = (n.bit_length() + 7) // 8
@@ -72,6 +70,7 @@ def encrypt_binary(pk, data):
     return encrypted_binary
 
 
+# Decrypt binary data
 def decrypt_binary(pk, encrypted_data):
     d, n = pk
     size = (n.bit_length() + 7) // 8
@@ -86,30 +85,28 @@ def decrypt_binary(pk, encrypted_data):
     return decrypted_binary
 
 
-def writeRSAEncrypted(filePath, p = 11, q = 17):
+def writeRSAEncrypted(filePath, p, q):
     binary = read_binary(filePath)
     public= generate_public_key(p, q)
     encrypted = encrypt_binary(public, binary)
     write_binary(filePath, encrypted)
 
 
-def writeRSADecrypted(file_path, p = 11, q = 17):
+def writeRSADecrypted(file_path, p, q):
     encrypted_data_from_file = read_binary(file_path)
     private = generate_private_key(p, q)
     decrypted_data = decrypt_binary(private, encrypted_data_from_file)
     write_binary(file_path, decrypted_data)
 
 
+# Split a hashed password into two arrays
 def hashToArraySplit(hashedPassword):
-    # Convert the hexadecimal string to bytes
     hashedPasswordBytes = bytes.fromhex(hashedPassword)
 
-    # Split the bytes into two halves
     halfLength = len(hashedPasswordBytes) // 2
     leftHalf = hashedPasswordBytes[:halfLength]
     rightHalf = hashedPasswordBytes[halfLength:]
 
-    # Convert the halves to arrays
     leftHalfArray = [b for b in leftHalf]
     rightHalfArray = [b for b in rightHalf]
 
@@ -117,8 +114,8 @@ def hashToArraySplit(hashedPassword):
 
 
 
+# Find the closest prime number to n
 def findClosestPrime(n):
-    # Check if n is a prime number
     def isPrime(n):
         if n < 2:
             return False
