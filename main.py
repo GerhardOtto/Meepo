@@ -131,7 +131,10 @@ def clickSegmentedButtonEncode(value):
             hashedPassword = endec.hashSlingingSlasher("NULL")
 
         print("Now starting encrypting with RSA...")
-        rsa.writeRSAEncrypted(filePath)
+        left, right = rsa.hashToArraySplit(hashedPassword)
+        prime_left = rsa.findClosestPrime(sum(left))
+        prime_right = rsa.findClosestPrime(sum(right))
+        rsa.writeRSAEncrypted(filePath,prime_left,prime_right)
         print("Done!")
 
 
@@ -162,7 +165,10 @@ def clickSegmentedButtonDecode(value):
             hashedPassword = endec.hashSlingingSlasher("NULL")
 
         print("Now starting decrypting with RSA...")
-        rsa.writeRSADecrypted(filePath)
+        left, right = rsa.hashToArraySplit(hashedPassword)
+        prime_left = rsa.findClosestPrime(sum(left))
+        prime_right = rsa.findClosestPrime(sum(right))
+        rsa.writeRSADecrypted(filePath,prime_left,prime_right)
         print("Done!")
 
 
