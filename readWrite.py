@@ -12,7 +12,7 @@ def decodeWithOwnAlgo(filepath, hashedPassword):
 
     decodedData = endec.ownAlgoDecoder(fileData, hashedPassword)
     fileDir, fileName = os.path.split(filepath)
-    decodedFileName = fileName[:-len(".encoded")]
+    decodedFileName = fileName[:-len(".encrypted")]
     decodedFilepath = os.path.join(fileDir, decodedFileName)
 
     with open(decodedFilepath, "wb") as file:
@@ -24,7 +24,7 @@ def encodeWithOwnAlgo(filepath, hashedPassword):
     with open(filepath, "rb") as file:
         fileData = file.read()
     encodedData = endec.ownAlgoEncoder(fileData, hashedPassword)
-    encodedFilepath = filepath + ".encoded"
+    encodedFilepath = filepath + ".encrypted"
 
     with open(encodedFilepath, "wb") as file:
         file.write(encodedData)
