@@ -6,7 +6,7 @@ def deleteFile(filepath):
     os.remove(filepath)
 
 # Write decoded data to file.
-def decodeWithOwnAlgo(filepath, hashedPassword):
+def decryptWithOwnAlgo(filepath, hashedPassword):
     with open(filepath, "rb") as file:
         fileData = file.read()
 
@@ -19,7 +19,7 @@ def decodeWithOwnAlgo(filepath, hashedPassword):
 
 
 # Write encoded data to file.
-def encodeWithOwnAlgo(filepath, hashedPassword):
+def encryptWithOwnAlgo(filepath, hashedPassword):
     with open(filepath, "rb") as file:
         fileData = file.read()
     encodedData = endec.ownAlgoEncoder(fileData, hashedPassword)

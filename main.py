@@ -42,6 +42,9 @@ filePath = None
 def clickFileExplorer():
     global filePath
     filePath = fileExplorer.theFileExplorer(filePath)
+    buttonCreateEncrypt.configure(state=tkinter.NORMAL)
+    buttonCreateDecrypt.configure(state=tkinter.NORMAL)
+    buttonEmail.configure(state=tkinter.NORMAL)
 
 buttonExplore = customtkinter.CTkButton(master=frame, text="FileExplorer", command=clickFileExplorer, width=240)
 buttonExplore.pack(pady=12, padx=10)
@@ -71,11 +74,13 @@ def email():
     if emailAddress != None:
         emailer.sendMail(emailAddress,filePath)
         popup("Mail Sent!")
+        buttonEmail.configure(state=tkinter.DISABLED)
 
 
 buttonEmail = customtkinter.CTkButton(master=frame, text="Email", command=email,width=120,height=32,border_width=1,corner_radius=8)
 buttonEmail.pack(pady=12, padx = 10)
 buttonEmail.place(relx=0.2, rely=0.95, anchor=tkinter.CENTER)
+buttonEmail.configure(state=tkinter.DISABLED)
 
 #Popup button
 def popup(theMessage):
@@ -122,7 +127,7 @@ def clickSegmentedButtonEncrypt(value):
     
         print("Now starting encrypting with own algo...")
         handelPW.savePassword(hashedPassword,filePath)
-        readWrite.EncryptWithOwnAlgo(filePath,hashedPassword)
+        readWrite.encryptWithOwnAlgo(filePath,hashedPassword)
         readWrite.deleteFile(filePath)
         print("Done!")
     
@@ -140,6 +145,7 @@ def clickSegmentedButtonEncrypt(value):
 
     popup("Button clicked: " + value) 
     segementedButtonEncryptr.set("null")
+    segementedButtonEncryptr.configure(state = "disabled")
 
 
 segementedButtonEncryptr = customtkinter.CTkSegmentedButton(master=frame,values=["Encrypt OwnAlgo", "RSA Encrypt"],command=clickSegmentedButtonEncrypt)
@@ -156,7 +162,7 @@ def clickSegmentedButtonDecrypt(value):
             hashedPassword = "NULL"
 
         print("Now starting decrypting with own algo...")
-        newfilePath, fileData = readWrite.DecryptWithOwnAlgo(filePath,hashedPassword)
+        newfilePath, fileData = readWrite.decryptWithOwnAlgo(filePath,hashedPassword)
         
         with open(newfilePath, "wb") as file:
             file.write(fileData)
@@ -192,6 +198,7 @@ def clickSegmentedButtonDecrypt(value):
             print("Error occurred: ", e)
 
     segementedButtonDecrypt.set("null")
+    segementedButtonDecrypt.configure(state = "disabled")
 
 
 segementedButtonDecrypt = customtkinter.CTkSegmentedButton(master=frame,values=["Decrypt OwnAlgo", "RSA Decrypt"],command=clickSegmentedButtonDecrypt)
@@ -221,6 +228,7 @@ def clickDecrypt():
 buttonCreateDecrypt = customtkinter.CTkButton(root, text="Start Decrypting", command=clickDecrypt, width=25)
 buttonCreateDecrypt.pack(pady=12, padx=10)
 buttonCreateDecrypt.place(relx=0.625, rely=0.35, anchor=tkinter.CENTER)
+buttonCreateDecrypt.configure(state=tkinter.DISABLED)
 
 
 def clickEncrypt():
@@ -236,11 +244,13 @@ def clickEncrypt():
     dialog.geometry(f"{dialogWidth}x{dialogHeight}+{x}+{y}")
     password = dialog.get_input()
     hashedPassword = endec.hashSlingingSlasher(password)
-    segementedButtonEncryptr.configure(state = "disabled")
+    segementedButtonEncryptr.configure(state = "enabled")
+    
 
 
 buttonCreateEncrypt = customtkinter.CTkButton(root, text="Start Encrypting", command=clickEncrypt, width=25)
 buttonCreateEncrypt.pack(pady=12, padx=10)
 buttonCreateEncrypt.place(relx=0.365, rely=0.35, anchor=tkinter.CENTER)
+buttonCreateEncrypt.configure(state=tkinter.DISABLED)
 
 root.mainloop()

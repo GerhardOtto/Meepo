@@ -13,26 +13,34 @@ def hashSlingingSlasher(password):
 # Encrypts binary data with own xor algorithm.
 def ownAlgoEncoder(fileData, hashedPassword):
     n = len(fileData)
-    hashedPasswordBytes = bytes(hashedPassword, "utf-8")
-    encodedData = bytearray(n)
-    for i in range(n):
-        x = fileData[n - i - 1]
-        y = hashedPasswordBytes[i % len(hashedPasswordBytes)]
+    reorderedData = bytearray(n)
 
-        encodedData[i] =  x ^ y
-    
-    return encodedData
+    for i in range(0, n, 2):
+        if i // 2 % 2 == 0:
+            reorderedData[i] = fileData[n - i - 1]
+            if i + 1 < n:
+                reorderedData[i + 1] = fileData[i]
+        else:
+            reorderedData[i] = fileData[i]
+            if i + 1 < n:
+                reorderedData[i + 1] = fileData[n - i - 1]
+
+    return reorderedData
 
 
 # Decrypts binary data with own xor algorithm.
-def ownAlgoDecoder(encodedData, hashedPassword):
-    n = len(encodedData)
-    hashedPasswordBytes = bytes(hashedPassword, "utf-8")
-    decodedData = bytearray(n)
-    for i in range(n):
-        x = encodedData[i]
-        y = hashedPasswordBytes[i % len(hashedPasswordBytes)]
+def ownAlgoDecoder(fileData, hashedPassword):
+    n = len(fileData)
+    originalData = bytearray(n)
 
-        decodedData[n - i - 1] = x ^ y
+    for i in range(0, n, 2):
+        if i // 2 % 2 == 0:
+            originalData[n - i - 1] = fileData[i]
+            if i + 1 < n:
+                originalData[i] = fileData[i + 1]
+        else:
+            originalData[i] = fileData[i]
+            if i + 1 < n:
+                originalData[n - i - 1] = fileData[i + 1]
 
-    return decodedData
+    return originalData
