@@ -77,7 +77,9 @@ def getPrivateKey(password):
                 _, private_key_str = keys.split(';')
                 n, d = [int(x) for x in private_key_str.split(',')]
                 return binary, (n, d)
-    return None, None
+            else :
+                return None, None
+
 
 
 def encrypt_file(input_filepath, public_key):
