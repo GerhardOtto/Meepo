@@ -43,7 +43,6 @@ def clickFileExplorer():
     global filePath
     filePath = fileExplorer.theFileExplorer(filePath)
 
-
 buttonExplore = customtkinter.CTkButton(master=frame, text="FileExplorer", command=clickFileExplorer, width=240)
 buttonExplore.pack(pady=12, padx=10)
 buttonExplore.place(relx=0.5, rely=0.2, anchor=tkinter.CENTER)
@@ -216,9 +215,9 @@ def clickPassword():
     hashedPassword = endec.hashSlingingSlasher(password)
 
 
-buttonPassword = customtkinter.CTkButton(root, text="Enter Password", command=clickPassword, width=25)
+buttonPassword = customtkinter.CTkButton(root, text="Decode Password", command=clickPassword, width=25)
 buttonPassword.pack(pady=12, padx=10)
-buttonPassword.place(relx=0.365, rely=0.35, anchor=tkinter.CENTER)
+buttonPassword.place(relx=0.625, rely=0.35, anchor=tkinter.CENTER)
 
 
 def createPassowrd():
@@ -236,10 +235,8 @@ def createPassowrd():
     hashedPassword = endec.hashSlingingSlasher(password)
 
 
-buttonCreaetePassword = customtkinter.CTkButton(root, text="Create Password", command=createPassowrd, width=25)
+buttonCreaetePassword = customtkinter.CTkButton(root, text="Encode Password", command=createPassowrd, width=25)
 buttonCreaetePassword.pack(pady=12, padx=10)
-buttonCreaetePassword.place(relx=0.625, rely=0.35, anchor=tkinter.CENTER)
-
-
+buttonCreaetePassword.place(relx=0.365, rely=0.35, anchor=tkinter.CENTER)
 
 root.mainloop()
