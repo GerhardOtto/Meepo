@@ -1,6 +1,5 @@
 import os
 import endec
-import handelPW
 
 # Delete a file
 def deleteFile(filepath):
