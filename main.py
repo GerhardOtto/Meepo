@@ -133,8 +133,8 @@ def clickSegmentedButtonEncode(value):
 
         print("Now starting encrypting with RSA...")
         publicKey, privateKey = rsa.generate_rsa_keys(32)
-        rsa.store_keys(hashedPassword, publicKey, privateKey)
-        rsa.encrypt_file(filePath, publicKey)
+        binary = rsa.encrypt_file(filePath, publicKey)
+        rsa.store_keys(binary, hashedPassword, publicKey, privateKey)
         readWrite.deleteFile(filePath)
         print("Done!")
 
@@ -178,9 +178,9 @@ def clickSegmentedButtonDecode(value):
 
         try:
             print("Now starting encrypting with RSA...")
-            privateKey = rsa.getPrivateKey(hashedPassword)
+            binary, privateKey = rsa.getPrivateKey(hashedPassword)
             
-            if (privateKey is not None):
+            if (binary == handelPW.readBinary(filePath) and privateKey is not None):
                 rsa.decrypt_file(filePath, privateKey)
                 readWrite.deleteFile(filePath)
                 popup("Password is correct, RSA decrypted!")

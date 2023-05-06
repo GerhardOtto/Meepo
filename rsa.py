@@ -1,6 +1,7 @@
 import random
 import math
 import os
+import handelPW
 
 # Greatest Common Divisor
 def gcd(a, b):
@@ -63,18 +64,20 @@ def decrypt_rsa(ciphertext, private_key):
     return pow(ciphertext, d, n)
 
 
-def store_keys(password, public_key, private_key):
+def store_keys(binary,password, public_key, private_key):
     with open('keys.txt', 'a') as keys_file:
-        keys_file.write(f"{password}: {public_key[0]},{public_key[1]};{private_key[0]},{private_key[1]}\n")
+        keys_file.write(f"{binary}!{password}: {public_key[0]},{public_key[1]};{private_key[0]},{private_key[1]}\n")
 
 def getPrivateKey(password):
     with open('keys.txt', 'r') as keys_file:
         for line in keys_file:
-            stored_password, keys = line.strip().split(': ')
+            binary_and_password, keys = line.strip().split(': ')
+            binary, stored_password = binary_and_password.split('!')
             if stored_password == password:
                 _, private_key_str = keys.split(';')
                 n, d = [int(x) for x in private_key_str.split(',')]
-                return n, d
+                return binary, (n, d)
+    return None, None
 
 
 def encrypt_file(input_filepath, public_key):
@@ -85,6 +88,8 @@ def encrypt_file(input_filepath, public_key):
 
     with open(output_filepath, 'w') as outfile:
         outfile.write(','.join(str(x) for x in encrypted_content))
+
+    return handelPW.readBinary(output_filepath)
 
 # Decrypt a file
 def decrypt_file(input_filepath, private_key):
