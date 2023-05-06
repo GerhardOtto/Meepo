@@ -132,11 +132,10 @@ def clickSegmentedButtonEncode(value):
             hashedPassword = endec.hashSlingingSlasher("NULL")
 
         print("Now starting encrypting with RSA...")
-        left, right = rsa.hashToArraySplit(hashedPassword)
-        primeLeft = rsa.findClosestPrime(sum(left))
-        primeRight = rsa.findClosestPrime(sum(right))
-        rsa.writeRSAEncrypted(filePath,primeLeft,primeRight)
-        handelPW.savePassword(hashedPassword,filePath)
+        publicKey, privateKey = rsa.generate_rsa_keys(32)
+        rsa.store_keys(hashedPassword, publicKey, privateKey)
+        rsa.encrypt_file(filePath, publicKey)
+        readWrite.deleteFile(filePath)
         print("Done!")
 
 
@@ -179,14 +178,15 @@ def clickSegmentedButtonDecode(value):
 
         try:
             print("Now starting encrypting with RSA...")
-            if handelPW.comparePassword(hashedPassword,filePath):
-                left, right = rsa.hashToArraySplit(hashedPassword)
-                primeLeft = rsa.findClosestPrime(sum(left))
-                primeRight = rsa.findClosestPrime(sum(right))
-                rsa.writeRSAEncrypted(filePath,primeLeft,primeRight)
+            privateKey = rsa.getPrivateKey(hashedPassword)
+            
+            if (privateKey is not None):
+                rsa.decrypt_file(filePath, privateKey)
+                readWrite.deleteFile(filePath)
                 popup("Password is correct, RSA decrypted!")
-            else :
+            else:
                 popup("Password is incorrect!")
+
             print("Done!")
         except Exception as e:
             print("Error occurred: ", e)

@@ -1,134 +1,98 @@
-# Greateast common divisor
+import random
+import math
+import os
+
+# Greatest Common Divisor
 def gcd(a, b):
     while b:
         a, b = b, a % b
     return a
 
+# Extended Euclidean Algorithm
+def extended_gcd(a, b):
+    if a == 0:
+        return b, 0, 1
+    else:
+        g, x, y = extended_gcd(b % a, a)
+        return g, y - (b // a) * x, x
 
-# Get the modular inverse of a number
-def mod_inverse(a, m):
-    for x in range(1, m):
-        if (a * x) % m == 1:
-            return x
-    return None
+# Modular Inverse
+def mod_inverse(e, phi):
+    _, x, _ = extended_gcd(e, phi)
+    return (x % phi + phi) % phi
 
-
-# Generate public key
-def generate_public_key(p, q):
-    n = p * q
-    phi = (p - 1) * (q - 1)
-
-    e = 2
-    while e < phi:
-        if gcd(e, phi) == 1:
-            break
-        e += 1
-
-    return (e, n)
-
-
-# Generate private key
-def generate_private_key(p, q):
-    n = p * q
-    phi = (p - 1) * (q - 1)
-
-    e = 2
-    while e < phi:
-        if gcd(e, phi) == 1:
-            break
-        e += 1
-
-    d = mod_inverse(e, phi)
-
-    return (d, n)
-
-
-# Read binary data from file
-def read_binary(file_path):
-    with open(file_path, 'rb') as file:
-        binary_data = file.read()
-    return binary_data
-
-
-# Write binary data to file
-def write_binary(file_path, binary_data):
-    with open(file_path, 'wb') as file:
-        file.write(binary_data)
-
-
-# Encrypt binary data
-def encrypt_binary(pk, data):
-    e, n = pk
-    size = (n.bit_length() + 7) // 8
-    encrypted_data = []
-
-    for b in data:
-        encrypted_byte = pow(b, e, n).to_bytes(size, 'big')
-        encrypted_data.append(encrypted_byte)
-
-    encrypted_binary = b"".join(encrypted_data)
-    return encrypted_binary
-
-
-# Decrypt binary data
-def decrypt_binary(pk, encrypted_data):
-    d, n = pk
-    size = (n.bit_length() + 7) // 8
-    decrypted_data = []
-
-    for i in range(0, len(encrypted_data), size):
-        chunk = encrypted_data[i:i+size]
-        decrypted_byte = pow(int.from_bytes(chunk, 'big'), d, n)
-        decrypted_data.append(decrypted_byte)
-
-    decrypted_binary = bytes(decrypted_data)
-    return decrypted_binary
-
-
-def writeRSAEncrypted(filePath, p, q):
-    binary = read_binary(filePath)
-    public= generate_public_key(p, q)
-    encrypted = encrypt_binary(public, binary)
-    write_binary(filePath, encrypted)
-
-
-def writeRSADecrypted(file_path, p, q):
-    encrypted_data_from_file = read_binary(file_path)
-    private = generate_private_key(p, q)
-    decrypted_data = decrypt_binary(private, encrypted_data_from_file)
-    write_binary(file_path, decrypted_data)
-
-
-# Split a hashed password into two arrays
-def hashToArraySplit(hashedPassword):
-    hashedPasswordBytes = bytes.fromhex(hashedPassword)
-
-    halfLength = len(hashedPasswordBytes) // 2
-    leftHalf = hashedPasswordBytes[:halfLength]
-    rightHalf = hashedPasswordBytes[halfLength:]
-
-    leftHalfArray = [b for b in leftHalf]
-    rightHalfArray = [b for b in rightHalf]
-
-    return leftHalfArray, rightHalfArray
-
-
-
-# Find the closest prime number to n
-def findClosestPrime(n):
-    def isPrime(n):
-        if n < 2:
+# Check if a number is prime
+def is_prime(n):
+    if n <= 1:
+        return False
+    for i in range(2, int(math.sqrt(n)) + 1):
+        if n % i == 0:
             return False
-        for i in range(2, int(n ** 0.5) + 1):
-            if n % i == 0:
-                return False
-        return True
+    return True
 
-    # Search for prime numbers in both directions from n
-    i = n
+# Generate a random prime number
+def generate_prime(bits):
     while True:
-        if isPrime(i):
-            return i
-        if isPrime(n - (i - n)):
-            return n - (i - n)
-        i += 1
+        n = random.getrandbits(bits)
+        if is_prime(n):
+            return n
+
+# Generate RSA keys
+def generate_rsa_keys(bits):
+    p = generate_prime(bits // 2)
+    q = generate_prime(bits // 2)
+    n = p * q
+    phi = (p - 1) * (q - 1)
+    
+    while True:
+        e = random.randint(2, phi - 1)
+        if gcd(e, phi) == 1:
+            break
+            
+    d = mod_inverse(e, phi)
+    return (n, e), (n, d)
+
+# RSA encryption
+def encrypt_rsa(plaintext, public_key):
+    n, e = public_key
+    return pow(plaintext, e, n)
+
+# RSA decryption
+def decrypt_rsa(ciphertext, private_key):
+    n, d = private_key
+    return pow(ciphertext, d, n)
+
+
+def store_keys(password, public_key, private_key):
+    with open('keys.txt', 'a') as keys_file:
+        keys_file.write(f"{password}: {public_key[0]},{public_key[1]};{private_key[0]},{private_key[1]}\n")
+
+def getPrivateKey(password):
+    with open('keys.txt', 'r') as keys_file:
+        for line in keys_file:
+            stored_password, keys = line.strip().split(': ')
+            if stored_password == password:
+                _, private_key_str = keys.split(';')
+                n, d = [int(x) for x in private_key_str.split(',')]
+                return n, d
+
+
+def encrypt_file(input_filepath, public_key):
+    output_filepath = f"{input_filepath}.encrypted"
+    with open(input_filepath, 'rb') as infile:
+        content = infile.read()
+        encrypted_content = [encrypt_rsa(byte, public_key) for byte in content]
+
+    with open(output_filepath, 'w') as outfile:
+        outfile.write(','.join(str(x) for x in encrypted_content))
+
+# Decrypt a file
+def decrypt_file(input_filepath, private_key):
+    output_filepath = f"{os.path.splitext(input_filepath)[0]}"
+    with open(input_filepath, 'r') as infile:
+        encrypted_content = [int(x) for x in infile.read().split(',')]
+
+    decrypted_content = bytearray([decrypt_rsa(byte, private_key) for byte in encrypted_content])
+
+    with open(output_filepath, 'wb') as outfile:
+        outfile.write(decrypted_content)
