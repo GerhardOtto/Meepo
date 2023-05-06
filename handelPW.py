@@ -3,9 +3,7 @@ def savePassword(hashedPassword,filePath):
     with open("password.txt", "a") as f:
         binary = readBinary(filePath)
         f.write(hashedPassword+binary + "\n" )
-
-    print("Password saved to file!")
-
+        
 
 def comparePassword(hashedPassword,filePath):
     # Open the file and read each hashed password from it

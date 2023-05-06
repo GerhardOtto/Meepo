@@ -10,20 +10,20 @@ def gcd(a, b):
     return a
 
 # Extended Euclidean Algorithm
-def extended_gcd(a, b):
+def extendedGcd(a, b):
     if a == 0:
         return b, 0, 1
     else:
-        g, x, y = extended_gcd(b % a, a)
+        g, x, y = extendedGcd(b % a, a)
         return g, y - (b // a) * x, x
 
 # Modular Inverse
-def mod_inverse(e, phi):
-    _, x, _ = extended_gcd(e, phi)
+def modInverse(e, phi):
+    _, x, _ = extendedGcd(e, phi)
     return (x % phi + phi) % phi
 
 # Check if a number is prime
-def is_prime(n):
+def isPrime(n):
     if n <= 1:
         return False
     for i in range(2, int(math.sqrt(n)) + 1):
@@ -32,16 +32,16 @@ def is_prime(n):
     return True
 
 # Generate a random prime number
-def generate_prime(bits):
+def generatePrime(bits):
     while True:
         n = random.getrandbits(bits)
-        if is_prime(n):
+        if isPrime(n):
             return n
 
 # Generate RSA keys
-def generate_rsa_keys(bits):
-    p = generate_prime(bits // 2)
-    q = generate_prime(bits // 2)
+def generateRsaKeys(bits):
+    p = generatePrime(bits // 2)
+    q = generatePrime(bits // 2)
     n = p * q
     phi = (p - 1) * (q - 1)
     
@@ -50,56 +50,56 @@ def generate_rsa_keys(bits):
         if gcd(e, phi) == 1:
             break
             
-    d = mod_inverse(e, phi)
+    d = modInverse(e, phi)
     return (n, e), (n, d)
 
 # RSA encryption
-def encrypt_rsa(plaintext, public_key):
-    n, e = public_key
+def encryptRsa(plaintext, publicKey):
+    n, e = publicKey
     return pow(plaintext, e, n)
 
 # RSA decryption
-def decrypt_rsa(ciphertext, private_key):
-    n, d = private_key
+def decryptRsa(ciphertext, privateKey):
+    n, d = privateKey
     return pow(ciphertext, d, n)
 
 
-def store_keys(binary,password, public_key, private_key):
+def storeKeys(binary,password, publicKey, privateKey):
     with open('keys.txt', 'a') as keys_file:
-        keys_file.write(f"{binary}!{password}: {public_key[0]},{public_key[1]};{private_key[0]},{private_key[1]}\n")
+        keys_file.write(f"{binary}!{password}: {publicKey[0]},{publicKey[1]};{privateKey[0]},{privateKey[1]}\n")
 
 def getPrivateKey(password):
     with open('keys.txt', 'r') as keys_file:
         for line in keys_file:
-            binary_and_password, keys = line.strip().split(': ')
-            binary, stored_password = binary_and_password.split('!')
-            if stored_password == password:
-                _, private_key_str = keys.split(';')
-                n, d = [int(x) for x in private_key_str.split(',')]
+            binaryAndPassword, keys = line.strip().split(': ')
+            binary, storedPassword = binaryAndPassword.split('!')
+            if storedPassword == password:
+                _, privateKey_str = keys.split(';')
+                n, d = [int(x) for x in privateKey_str.split(',')]
                 return binary, (n, d)
             else :
                 return None, None
 
 
 
-def encrypt_file(input_filepath, public_key):
-    output_filepath = f"{input_filepath}.encrypted"
-    with open(input_filepath, 'rb') as infile:
+def encryptFile(inputFilepath, publicKey):
+    outputFilepath = f"{inputFilepath}.encrypted"
+    with open(inputFilepath, 'rb') as infile:
         content = infile.read()
-        encrypted_content = [encrypt_rsa(byte, public_key) for byte in content]
+        encryptedContent = [encryptRsa(byte, publicKey) for byte in content]
 
-    with open(output_filepath, 'w') as outfile:
-        outfile.write(','.join(str(x) for x in encrypted_content))
+    with open(outputFilepath, 'w') as outfile:
+        outfile.write(','.join(str(x) for x in encryptedContent))
 
-    return handelPW.readBinary(output_filepath)
+    return handelPW.readBinary(outputFilepath)
 
 # Decrypt a file
-def decrypt_file(input_filepath, private_key):
-    output_filepath = f"{os.path.splitext(input_filepath)[0]}"
-    with open(input_filepath, 'r') as infile:
-        encrypted_content = [int(x) for x in infile.read().split(',')]
+def decryptFile(inputFilepath, privateKey):
+    outputFilepath = f"{os.path.splitext(inputFilepath)[0]}"
+    with open(inputFilepath, 'r') as infile:
+        encryptedContent = [int(x) for x in infile.read().split(',')]
 
-    decrypted_content = bytearray([decrypt_rsa(byte, private_key) for byte in encrypted_content])
+    decryptedContent = bytearray([decryptRsa(byte, privateKey) for byte in encryptedContent])
 
-    with open(output_filepath, 'wb') as outfile:
-        outfile.write(decrypted_content)
+    with open(outputFilepath, 'wb') as outfile:
+        outfile.write(decryptedContent)

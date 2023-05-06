@@ -132,9 +132,9 @@ def clickSegmentedButtonEncode(value):
             hashedPassword = endec.hashSlingingSlasher("NULL")
 
         print("Now starting encrypting with RSA...")
-        publicKey, privateKey = rsa.generate_rsa_keys(32)
-        binary = rsa.encrypt_file(filePath, publicKey)
-        rsa.store_keys(binary, hashedPassword, publicKey, privateKey)
+        publicKey, privateKey = rsa.generateRsaKeys(32)
+        binary = rsa.encryptFile(filePath, publicKey)
+        rsa.storeKeys(binary, hashedPassword, publicKey, privateKey)
         readWrite.deleteFile(filePath)
         print("Done!")
 
@@ -181,7 +181,7 @@ def clickSegmentedButtonDecode(value):
             binary, privateKey = rsa.getPrivateKey(hashedPassword)
             
             if (binary == handelPW.readBinary(filePath) and privateKey is not None):
-                rsa.decrypt_file(filePath, privateKey)
+                rsa.decryptFile(filePath, privateKey)
                 readWrite.deleteFile(filePath)
                 popup("Password is correct, RSA decrypted!")
             else:
@@ -234,7 +234,6 @@ def createPassowrd():
     dialog.geometry(f"{dialogWidth}x{dialogHeight}+{x}+{y}")
     password = dialog.get_input()
     hashedPassword = endec.hashSlingingSlasher(password)
-    handelPW.savePassword(hashedPassword, filePath)
 
 
 buttonCreaetePassword = customtkinter.CTkButton(root, text="Create Password", command=createPassowrd, width=25)
