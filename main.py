@@ -5,6 +5,7 @@ import emailer
 import fileExplorer
 import readWrite
 import rsa
+import handelPW
 
 
 customtkinter.set_appearance_mode("system")
@@ -43,9 +44,9 @@ def clickFileExplorer():
     filePath = fileExplorer.theFileExplorer(filePath)
 
 
-buttonExplore = customtkinter.CTkButton(master=frame, text="FileExplorer", command=clickFileExplorer)
+buttonExplore = customtkinter.CTkButton(master=frame, text="FileExplorer", command=clickFileExplorer, width=240)
 buttonExplore.pack(pady=12, padx=10)
-buttonExplore.place(relx=0.5, rely=0.3, anchor=tkinter.CENTER)
+buttonExplore.place(relx=0.5, rely=0.2, anchor=tkinter.CENTER)
 
 #Close button
 def closeProgram():
@@ -78,15 +79,15 @@ buttonEmail.pack(pady=12, padx = 10)
 buttonEmail.place(relx=0.2, rely=0.95, anchor=tkinter.CENTER)
 
 #Popup button
-def popup(value):
+def popup(theMessage):
     popup = tkinter.Toplevel()
     popup.title("Button Clicked")
     popup.overrideredirect(True)
 
-    message = "Button clicked: " + value
+    message = theMessage
     tkinter.Label(popup, text=message, bg="#303030", fg="white").pack()
 
-    button_okay = tkinter.Button(popup, text="Okay", command=popup.destroy, bg="#505050", fg="white")
+    button_okay = tkinter.Button(popup, text="Okay", command=popup.destroy, bg="#505050")
     button_okay.pack(pady=10)
 
     popup.configure(bg="#303030")
@@ -115,13 +116,13 @@ def popup(value):
 #Segmented button for encrypting
 def clickSegmentedButtonEncode(value):
     global hashedPassword
-    global normalPassword
 
     if (value == "Encode OwnAlgo"):
         if (hashedPassword == None):
             hashedPassword = "NULL"
     
         print("Now starting encrypting with own algo...")
+        handelPW.savePassword(hashedPassword,filePath)
         readWrite.encodeWithOwnAlgo(filePath,hashedPassword)
         readWrite.deleteFile(filePath)
         print("Done!")
@@ -132,13 +133,14 @@ def clickSegmentedButtonEncode(value):
 
         print("Now starting encrypting with RSA...")
         left, right = rsa.hashToArraySplit(hashedPassword)
-        prime_left = rsa.findClosestPrime(sum(left))
-        prime_right = rsa.findClosestPrime(sum(right))
-        rsa.writeRSAEncrypted(filePath,prime_left,prime_right)
+        primeLeft = rsa.findClosestPrime(sum(left))
+        primeRight = rsa.findClosestPrime(sum(right))
+        rsa.writeRSAEncrypted(filePath,primeLeft,primeRight)
+        handelPW.savePassword(hashedPassword,filePath)
         print("Done!")
 
 
-    popup(value) 
+    popup("Button clicked: " + value) 
     segementedButtonEncoder.set("null")
 
 
@@ -149,16 +151,27 @@ segementedButtonEncoder.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 #Segmented button for decrypting
 def clickSegmentedButtonDecode(value):
     global hashedPassword
-    global normalPassword
 
     if (value == "Decode OwnAlgo"):
         if (hashedPassword == None):
             hashedPassword = "NULL"
 
         print("Now starting decrypting with own algo...")
-        readWrite.decodeWithOwnAlgo(filePath,hashedPassword)
-        readWrite.deleteFile(filePath)
+        newfilePath, fileData = readWrite.decodeWithOwnAlgo(filePath,hashedPassword)
+        
+        with open(newfilePath, "wb") as file:
+            file.write(fileData)
+
+
+        if handelPW.comparePassword(hashedPassword,newfilePath):
+                readWrite.deleteFile(filePath)
+                popup("Password is correct, OwnAlgo decrypted!")
+        else:
+            popup("Password is incorrect!")
+
+
         print("Done!")
+
 
     elif value == "RSA Decode":
         if (hashedPassword == None):
@@ -166,16 +179,18 @@ def clickSegmentedButtonDecode(value):
 
         try:
             print("Now starting encrypting with RSA...")
-            left, right = rsa.hashToArraySplit(hashedPassword)
-            prime_left = rsa.findClosestPrime(sum(left))
-            prime_right = rsa.findClosestPrime(sum(right))
-            rsa.writeRSAEncrypted(filePath,prime_left,prime_right)
+            if handelPW.comparePassword(hashedPassword,filePath):
+                left, right = rsa.hashToArraySplit(hashedPassword)
+                primeLeft = rsa.findClosestPrime(sum(left))
+                primeRight = rsa.findClosestPrime(sum(right))
+                rsa.writeRSAEncrypted(filePath,primeLeft,primeRight)
+                popup("Password is correct, RSA decrypted!")
+            else :
+                popup("Password is incorrect!")
             print("Done!")
         except Exception as e:
             print("Error occurred: ", e)
 
-
-    popup(value)
     segementedButtonDecoder.set("null")
 
 
@@ -185,10 +200,9 @@ segementedButtonDecoder.place(relx=0.5, rely=0.7, anchor=tkinter.CENTER)
 
 #Password
 hashedPassword = None
-normalPassword = None
+
 def clickPassword():
     global hashedPassword
-    global normalPassword
     dialog = customtkinter.CTkInputDialog(text="Type in a password:", title="Password")
     dialogWidth = dialog.winfo_reqwidth()
     dialogHeight = dialog.winfo_reqheight()
@@ -199,12 +213,34 @@ def clickPassword():
     y = (root.winfo_screenheight() // 2) - (dialogHeight // 2) - (rootHeight // 2)
     dialog.geometry(f"{dialogWidth}x{dialogHeight}+{x}+{y}")
     password = dialog.get_input()
-    normalPassword = password
     hashedPassword = endec.hashSlingingSlasher(password)
 
 
-buttonPassword = customtkinter.CTkButton(root, text="Enter Password", command=clickPassword)
-buttonPassword.pack(pady=12, padx = 10)
-buttonPassword.place(relx=0.5, rely=0.2, anchor=tkinter.CENTER)
+buttonPassword = customtkinter.CTkButton(root, text="Enter Password", command=clickPassword, width=25)
+buttonPassword.pack(pady=12, padx=10)
+buttonPassword.place(relx=0.365, rely=0.35, anchor=tkinter.CENTER)
+
+
+def createPassowrd():
+    global hashedPassword
+    dialog = customtkinter.CTkInputDialog(text="Type in a password:", title="Password")
+    dialogWidth = dialog.winfo_reqwidth()
+    dialogHeight = dialog.winfo_reqheight()
+    root.update_idletasks()  # update the root window to get the correct values for its dimensions
+    rootWidth = root.winfo_width()
+    rootHeight = root.winfo_height()
+    x = (root.winfo_screenwidth() // 2) - (dialogWidth // 2)
+    y = (root.winfo_screenheight() // 2) - (dialogHeight // 2) - (rootHeight // 2)
+    dialog.geometry(f"{dialogWidth}x{dialogHeight}+{x}+{y}")
+    password = dialog.get_input()
+    hashedPassword = endec.hashSlingingSlasher(password)
+    handelPW.savePassword(hashedPassword, filePath)
+
+
+buttonCreaetePassword = customtkinter.CTkButton(root, text="Create Password", command=createPassowrd, width=25)
+buttonCreaetePassword.pack(pady=12, padx=10)
+buttonCreaetePassword.place(relx=0.625, rely=0.35, anchor=tkinter.CENTER)
+
+
 
 root.mainloop()

@@ -1,5 +1,6 @@
 import os
 import endec
+import handelPW
 
 # Delete a file
 def deleteFile(filepath):
@@ -15,8 +16,7 @@ def decodeWithOwnAlgo(filepath, hashedPassword):
     decodedFileName = fileName[:-len(".encrypted")]
     decodedFilepath = os.path.join(fileDir, decodedFileName)
 
-    with open(decodedFilepath, "wb") as file:
-        file.write(decodedData)
+    return decodedFilepath,decodedData
 
 
 # Write encoded data to file.
