@@ -27,15 +27,15 @@ frame.pack(pady=20, padx=60, fill="both", expand=True)
 labelTitle = customtkinter.CTkLabel(master=frame, text="ENDEC", font=("Arial", 24))
 labelTitle.pack(pady=12, padx=10)
 
-#Decode title
-labelDecode = customtkinter.CTkLabel(master=frame, text="Decode", font=("Arial", 24))
-labelDecode.pack(pady=12, padx=10)
-labelDecode.place(relx = 0.38, rely = 0.6)
+#Decrypt title
+labelDecrypt = customtkinter.CTkLabel(master=frame, text="Decrypt", font=("Arial", 24))
+labelDecrypt.pack(pady=12, padx=10)
+labelDecrypt.place(relx = 0.38, rely = 0.6)
 
-#Encode title
-labelEncode = customtkinter.CTkLabel(master=frame, text="Encode", font=("Arial", 24))
-labelEncode.pack(pady=12, padx=10)
-labelEncode.place(relx = 0.4, rely = 0.4)
+#Encrypt title
+labelEncrypt = customtkinter.CTkLabel(master=frame, text="Encrypt", font=("Arial", 24))
+labelEncrypt.pack(pady=12, padx=10)
+labelEncrypt.place(relx = 0.4, rely = 0.4)
 
 #FileExplorer button
 filePath = None
@@ -67,7 +67,7 @@ def email():
     y = (root.winfo_screenheight() // 2) - (dialogHeight // 2) - (rootHeight // 2)
     dialog.geometry(f"{dialogWidth}x{dialogHeight}+{x}+{y}")
     emailAddress = dialog.get_input()
-    emailer.encodeToBinary(filePath)
+    emailer.EncryptToBinary(filePath)
     if emailAddress != None:
         emailer.sendMail(emailAddress,filePath)
         popup("Mail Sent!")
@@ -113,20 +113,20 @@ def popup(theMessage):
 
 
 #Segmented button for encrypting
-def clickSegmentedButtonEncode(value):
+def clickSegmentedButtonEncrypt(value):
     global hashedPassword
 
-    if (value == "Encode OwnAlgo"):
+    if (value == "Encrypt OwnAlgo"):
         if (hashedPassword == None):
             hashedPassword = "NULL"
     
         print("Now starting encrypting with own algo...")
         handelPW.savePassword(hashedPassword,filePath)
-        readWrite.encodeWithOwnAlgo(filePath,hashedPassword)
+        readWrite.EncryptWithOwnAlgo(filePath,hashedPassword)
         readWrite.deleteFile(filePath)
         print("Done!")
     
-    elif value == "RSA Encode":
+    elif value == "RSA Encrypt":
         if (hashedPassword == None):
             hashedPassword = endec.hashSlingingSlasher("NULL")
 
@@ -139,23 +139,24 @@ def clickSegmentedButtonEncode(value):
 
 
     popup("Button clicked: " + value) 
-    segementedButtonEncoder.set("null")
+    segementedButtonEncryptr.set("null")
 
 
-segementedButtonEncoder = customtkinter.CTkSegmentedButton(master=frame,values=["Encode OwnAlgo", "RSA Encode"],command=clickSegmentedButtonEncode)
-segementedButtonEncoder.pack(padx=20, pady=10)
-segementedButtonEncoder.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
+segementedButtonEncryptr = customtkinter.CTkSegmentedButton(master=frame,values=["Encrypt OwnAlgo", "RSA Encrypt"],command=clickSegmentedButtonEncrypt)
+segementedButtonEncryptr.pack(padx=20, pady=10)
+segementedButtonEncryptr.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
+segementedButtonEncryptr.configure(state = "disabled")
 
 #Segmented button for decrypting
-def clickSegmentedButtonDecode(value):
+def clickSegmentedButtonDecrypt(value):
     global hashedPassword
 
-    if (value == "Decode OwnAlgo"):
+    if (value == "Decrypt OwnAlgo"):
         if (hashedPassword == None):
             hashedPassword = "NULL"
 
         print("Now starting decrypting with own algo...")
-        newfilePath, fileData = readWrite.decodeWithOwnAlgo(filePath,hashedPassword)
+        newfilePath, fileData = readWrite.DecryptWithOwnAlgo(filePath,hashedPassword)
         
         with open(newfilePath, "wb") as file:
             file.write(fileData)
@@ -171,7 +172,7 @@ def clickSegmentedButtonDecode(value):
         print("Done!")
 
 
-    elif value == "RSA Decode":
+    elif value == "RSA Decrypt":
         if (hashedPassword == None):
             hashedPassword = endec.hashSlingingSlasher("NULL")
 
@@ -190,17 +191,18 @@ def clickSegmentedButtonDecode(value):
         except Exception as e:
             print("Error occurred: ", e)
 
-    segementedButtonDecoder.set("null")
+    segementedButtonDecrypt.set("null")
 
 
-segementedButtonDecoder = customtkinter.CTkSegmentedButton(master=frame,values=["Decode OwnAlgo", "RSA Decode"],command=clickSegmentedButtonDecode)
-segementedButtonDecoder.pack(padx=20, pady=10)
-segementedButtonDecoder.place(relx=0.5, rely=0.7, anchor=tkinter.CENTER)
+segementedButtonDecrypt = customtkinter.CTkSegmentedButton(master=frame,values=["Decrypt OwnAlgo", "RSA Decrypt"],command=clickSegmentedButtonDecrypt)
+segementedButtonDecrypt.pack(padx=20, pady=10)
+segementedButtonDecrypt.place(relx=0.5, rely=0.7, anchor=tkinter.CENTER)
+segementedButtonDecrypt.configure(state = "disabled")
 
 #Password
 hashedPassword = None
 
-def clickPassword():
+def clickDecrypt():
     global hashedPassword
     dialog = customtkinter.CTkInputDialog(text="Type in a password:", title="Password")
     dialogWidth = dialog.winfo_reqwidth()
@@ -213,14 +215,15 @@ def clickPassword():
     dialog.geometry(f"{dialogWidth}x{dialogHeight}+{x}+{y}")
     password = dialog.get_input()
     hashedPassword = endec.hashSlingingSlasher(password)
+    segementedButtonDecrypt.configure(state = "enabled")
 
 
-buttonPassword = customtkinter.CTkButton(root, text="Decode Password", command=clickPassword, width=25)
-buttonPassword.pack(pady=12, padx=10)
-buttonPassword.place(relx=0.625, rely=0.35, anchor=tkinter.CENTER)
+buttonCreateDecrypt = customtkinter.CTkButton(root, text="Start Decrypting", command=clickDecrypt, width=25)
+buttonCreateDecrypt.pack(pady=12, padx=10)
+buttonCreateDecrypt.place(relx=0.625, rely=0.35, anchor=tkinter.CENTER)
 
 
-def createPassowrd():
+def clickEncrypt():
     global hashedPassword
     dialog = customtkinter.CTkInputDialog(text="Type in a password:", title="Password")
     dialogWidth = dialog.winfo_reqwidth()
@@ -233,10 +236,11 @@ def createPassowrd():
     dialog.geometry(f"{dialogWidth}x{dialogHeight}+{x}+{y}")
     password = dialog.get_input()
     hashedPassword = endec.hashSlingingSlasher(password)
+    segementedButtonEncryptr.configure(state = "disabled")
 
 
-buttonCreaetePassword = customtkinter.CTkButton(root, text="Encode Password", command=createPassowrd, width=25)
-buttonCreaetePassword.pack(pady=12, padx=10)
-buttonCreaetePassword.place(relx=0.365, rely=0.35, anchor=tkinter.CENTER)
+buttonCreateEncrypt = customtkinter.CTkButton(root, text="Start Encrypting", command=clickEncrypt, width=25)
+buttonCreateEncrypt.pack(pady=12, padx=10)
+buttonCreateEncrypt.place(relx=0.365, rely=0.35, anchor=tkinter.CENTER)
 
 root.mainloop()
