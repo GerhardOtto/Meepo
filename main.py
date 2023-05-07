@@ -120,27 +120,26 @@ def popup(theMessage):
 #Segmented button for encrypting
 def clickSegmentedButtonEncrypt(value):
     global hashedPassword
-
     if (value == "Encrypt OwnAlgo"):
-        if (hashedPassword == None):
-            hashedPassword = "NULL"
-    
-        print("Now starting encrypting with own algo...")
-        handelPW.savePassword(hashedPassword,filePath)
-        readWrite.encryptWithOwnAlgo(filePath,hashedPassword)
-        readWrite.deleteFile(filePath)
-        print("Done!")
+        try:
+            print("Now starting encrypting with own algo...")
+            handelPW.savePassword(hashedPassword,filePath)
+            readWrite.encryptWithOwnAlgo(filePath,hashedPassword)
+            readWrite.deleteFile(filePath)
+            print("Done!")
+        except Exception as e:
+            print("Error occurred: ", e)
     
     elif value == "RSA Encrypt":
-        if (hashedPassword == None):
-            hashedPassword = endec.hashSlingingSlasher("NULL")
-
-        print("Now starting encrypting with RSA...")
-        publicKey, privateKey = rsa.generateRsaKeys(32)
-        binary = rsa.encryptFile(filePath, publicKey)
-        rsa.storeKeys(binary, hashedPassword, publicKey, privateKey)
-        readWrite.deleteFile(filePath)
-        print("Done!")
+        try:
+            print("Now starting encrypting with RSA...")
+            publicKey, privateKey = rsa.generateRsaKeys(32)
+            binary = rsa.encryptFile(filePath, publicKey)
+            rsa.storeKeys(binary, hashedPassword, publicKey, privateKey)
+            readWrite.deleteFile(filePath)
+            print("Done!")
+        except Exception as e:
+            print("Error occurred: ", e)
 
 
     popup("Button clicked: " + value) 
@@ -153,35 +152,33 @@ segementedButtonEncryptr.pack(padx=20, pady=10)
 segementedButtonEncryptr.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 segementedButtonEncryptr.configure(state = "disabled")
 
+
 #Segmented button for decrypting
 def clickSegmentedButtonDecrypt(value):
     global hashedPassword
-
     if (value == "Decrypt OwnAlgo"):
-        if (hashedPassword == None):
-            hashedPassword = "NULL"
 
-        print("Now starting decrypting with own algo...")
-        newfilePath, fileData = readWrite.decryptWithOwnAlgo(filePath,hashedPassword)
+        try:
+            print("Now starting decrypting with own algo...")
+            newfilePath, fileData = readWrite.decryptWithOwnAlgo(filePath,hashedPassword)
         
-        with open(newfilePath, "wb") as file:
-            file.write(fileData)
+            with open(newfilePath, "wb") as file:
+                file.write(fileData)
 
 
-        if handelPW.comparePassword(hashedPassword,newfilePath):
-                readWrite.deleteFile(filePath)
-                popup("Password is correct, OwnAlgo decrypted!")
-        else:
-            popup("Password is incorrect!")
+            if handelPW.comparePassword(hashedPassword,newfilePath):
+                    readWrite.deleteFile(filePath)
+                    popup("Password is correct, OwnAlgo decrypted!")
+            else:
+                popup("Password is incorrect!")
 
+            print("Done!")
+        except Exception as e:
+            print("Error occurred: ", e)
 
-        print("Done!")
 
 
     elif value == "RSA Decrypt":
-        if (hashedPassword == None):
-            hashedPassword = endec.hashSlingingSlasher("NULL")
-
         try:
             print("Now starting encrypting with RSA...")
             binary, privateKey = rsa.getPrivateKey(hashedPassword)
