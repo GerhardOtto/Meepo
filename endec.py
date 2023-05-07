@@ -11,7 +11,7 @@ def hashSlingingSlasher(password):
 
 
 # Encrypts binary data with own xor algorithm.
-def ownAlgoEncoder(fileData, hashedPassword):
+def ownAlgoEncoder(fileData):
     n = len(fileData)
     reorderedData = bytearray(n)
 
@@ -29,7 +29,7 @@ def ownAlgoEncoder(fileData, hashedPassword):
 
 
 # Decrypts binary data with own xor algorithm.
-def ownAlgoDecoder(fileData, hashedPassword):
+def ownAlgoDecoder(fileData):
     n = len(fileData)
     originalData = bytearray(n)
 
