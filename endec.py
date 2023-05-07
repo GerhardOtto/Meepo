@@ -10,7 +10,7 @@ def hashSlingingSlasher(password):
     return hashedPassword
 
 
-# Encrypts binary data with own xor algorithm.
+# Encrypts binary data with own algorithm.
 def ownAlgoEncoder(fileData):
     n = len(fileData)
     reorderedData = bytearray(n)
@@ -28,7 +28,7 @@ def ownAlgoEncoder(fileData):
     return reorderedData
 
 
-# Decrypts binary data with own xor algorithm.
+# Decrypts binary data with own algorithm.
 def ownAlgoDecoder(fileData):
     n = len(fileData)
     originalData = bytearray(n)
