@@ -68,6 +68,7 @@ def storeKeys(binary,password, publicKey, privateKey):
     with open('keys.txt', 'a') as keys_file:
         keys_file.write(f"{binary}!{password}: {publicKey[0]},{publicKey[1]};{privateKey[0]},{privateKey[1]}\n")
 
+# hier is die bug
 def getPrivateKey(password):
     with open('keys.txt', 'r') as keys_file:
         for line in keys_file:
@@ -77,8 +78,8 @@ def getPrivateKey(password):
                 _, privateKey_str = keys.split(';')
                 n, d = [int(x) for x in privateKey_str.split(',')]
                 return binary, (n, d)
-            else :
-                return None, None
+            # else :
+            #     return None, None
 
 
 
