@@ -124,7 +124,7 @@ def clickSegmentedButtonEncrypt(value):
         try:
             print("Now starting encrypting with own algo...")
             handelPW.savePassword(hashedPassword,filePath)
-            readWrite.encryptWithOwnAlgo(filePath,hashedPassword)
+            readWrite.encryptWithOwnAlgo(filePath)
             readWrite.deleteFile(filePath)
             print("Done!")
         except Exception as e:
@@ -160,7 +160,7 @@ def clickSegmentedButtonDecrypt(value):
 
         try:
             print("Now starting decrypting with own algo...")
-            newfilePath, fileData = readWrite.decryptWithOwnAlgo(filePath,hashedPassword)
+            newfilePath, fileData = readWrite.decryptWithOwnAlgo(filePath)
         
             with open(newfilePath, "wb") as file:
                 file.write(fileData)
