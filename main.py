@@ -182,9 +182,6 @@ def clickSegmentedButtonDecrypt(value):
         try:
             print("Now starting encrypting with RSA...")
             binary, privateKey = rsa.getPrivateKey(hashedPassword)
-            # check if
-            print(binary)
-            print(handelPW.readBinary(filePath))
             if (binary == handelPW.readBinary(filePath)):
                 rsa.decryptFile(filePath, privateKey)
                 readWrite.deleteFile(filePath)
