@@ -65,18 +65,18 @@ def decryptRsa(ciphertext, privateKey):
 
 
 def storeKeys(binary,password, publicKey, privateKey):
-    with open('keys.txt', 'a') as keys_file:
-        keys_file.write(f"{binary}!{password}: {publicKey[0]},{publicKey[1]};{privateKey[0]},{privateKey[1]}\n")
+    with open('keys.txt', 'a') as keysFile:
+        keysFile.write(f"{binary}!{password}: {publicKey[0]},{publicKey[1]};{privateKey[0]},{privateKey[1]}\n")
 
 # hier is die bug
 def getPrivateKey(password):
-    with open('keys.txt', 'r') as keys_file:
-        for line in keys_file:
+    with open('keys.txt', 'r') as keysFile:
+        for line in keysFile:
             binaryAndPassword, keys = line.strip().split(': ')
             binary, storedPassword = binaryAndPassword.split('!')
             if storedPassword == password:
-                _, privateKey_str = keys.split(';')
-                n, d = [int(x) for x in privateKey_str.split(',')]
+                _, privateKeyString = keys.split(';')
+                n, d = [int(x) for x in privateKeyString.split(',')]
                 return binary, (n, d)
             # else :
             #     return None, None
