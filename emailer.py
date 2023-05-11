@@ -22,12 +22,3 @@ def sendMail(theReceiver, filePath):
     with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
         smtp.login(emailSender, emailPassword)
         smtp.sendmail(emailSender, emailReceiver, em.as_string())
-
-
-# Encodes the file to binary for attachment
-def encodeToBinary(filePath):
-    with open(filePath, 'rb') as file:
-        fileContents = file.read()
-        print(fileContents)
-
-    return fileContents

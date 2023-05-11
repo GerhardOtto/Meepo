@@ -70,7 +70,7 @@ def email():
     y = (root.winfo_screenheight() // 2) - (dialogHeight // 2) - (rootHeight // 2)
     dialog.geometry(f"{dialogWidth}x{dialogHeight}+{x}+{y}")
     emailAddress = dialog.get_input()
-    emailer.EncryptToBinary(filePath)
+
     if emailAddress != None:
         emailer.sendMail(emailAddress,filePath)
         popup("Mail Sent!")
